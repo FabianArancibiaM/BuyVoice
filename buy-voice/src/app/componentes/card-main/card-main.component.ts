@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-card-main',
@@ -7,10 +7,15 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CardMainComponent implements OnInit {
 
-  @Input() defaultData: { title: string; desc: string };
+  @Input() defaultData: { title: string; desc: string; url: string };
+  @Output() callBack = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() { }
+
+  onClick(){
+    this.callBack.emit(this.defaultData.url);
+  }
 
 }

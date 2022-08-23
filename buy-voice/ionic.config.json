@@ -1,7 +1,9 @@
 {
   "name": "BuyVoice",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    }
   },
   "type": "angular"
 }
