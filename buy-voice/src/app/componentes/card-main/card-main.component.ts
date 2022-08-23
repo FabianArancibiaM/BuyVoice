@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { IInfoCardMenu } from '../interfaces/IMenu.interface';
 
 @Component({
   selector: 'app-card-main',
@@ -7,15 +8,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 })
 export class CardMainComponent implements OnInit {
 
-  @Input() defaultData: { title: string; desc: string; url: string };
+  @Input() defaultData: IInfoCardMenu;
   @Output() callBack = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit() { }
 
-  onClick(){
-    this.callBack.emit(this.defaultData.url);
+  onClick(url: string){
+    console.log(url)
+    this.callBack.emit(url);
   }
 
 }

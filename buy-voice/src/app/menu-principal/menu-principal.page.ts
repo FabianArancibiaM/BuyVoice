@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IInfoCardMenu } from '../componentes/interfaces/IMenu.interface';
 
 @Component({
   selector: 'app-menu-principal',
@@ -8,10 +9,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class MenuPrincipalPage implements OnInit {
 
-  public listCard = [
-    { title: "1", desc: "2", url: '/reporte'},
-    { title: "3", desc: "4", url: '/ver-stock' },
-    { title: "5", desc: "6", url: '/ajustar-inventario'}
+  public listCard: IInfoCardMenu[] = [
+    { title: 'Compra', children: [
+      {title: 'Nueva Compra', url: '/nueva-compra'},
+      {title: 'Compra Existente', url: '/compra-existente'},
+      {title: 'Anular Compra', url: '/anular-compra'}
+    ] },
+    { title: 'Ventas', children: [
+      {title: 'Nueva Venta', url: '/nueva-venta'},
+      {title: 'Venta Existente', url: '/venta-existente'},
+      {title: 'Anular Venta', url: '/anular-venta'},
+    ] },
+    { title: 'Inventario', children: [
+      {title: 'Ver Stock', url: '/ver-stock'},
+      {title: 'Ajustar Inventario', url: '/ajustar-inventario'},
+    ]},
+    { title: 'Reporte', children: [
+      {title: '', url: '/reporte'}
+    ] }
   ];
 
   constructor(private router: Router) { }
@@ -20,7 +35,8 @@ export class MenuPrincipalPage implements OnInit {
   ngOnInit() {
   }
 
-  redirectTo(url:string ){
+  redirectTo(url: string ){
+    console.log(url)
     this.router.navigateByUrl(url);
   }
 
