@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { InfoMenu } from 'src/app/models/info-menu.model';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
