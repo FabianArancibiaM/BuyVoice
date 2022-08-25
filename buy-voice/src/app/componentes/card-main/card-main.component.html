@@ -1,15 +1,24 @@
-<ion-card *ngIf="defaultData.children.length === 1" (click)="onClick(defaultData.children[0].url)">
-  <ion-card-header>
-    <ion-card-title>{{defaultData.title}}</ion-card-title>
-  </ion-card-header>
-  <ion-card-content></ion-card-content>
-</ion-card>
+<!-- <ion-list>
+  <ion-item>
+    <ion-select interface="popover" placeholder="{{defaultData.title}}" (ionChange)="onClick($event)">
+      <ion-select-option value="{{data.url}}" *ngFor="let data of defaultData.children" (click)="onClick(data.url)">
+        {{data.title}}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+</ion-list> -->
 
-<ion-card *ngIf="defaultData.children.length > 1">
-  <ion-card-header>
-    <ion-card-title>{{defaultData.title}}</ion-card-title>
-  </ion-card-header>
-  <ion-card-content interface="action-sheet" *ngFor="let data of defaultData.children">
-    {{data.title}}
-  </ion-card-content>
-</ion-card>
+<ion-header>
+	<ion-toolbar>
+		<ion-title>Home</ion-title>
+	</ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+	<ion-list lines="none">
+		<ion-item *ngFor="let item of defaultData.children" detail="true" (click)="onClick(item.url)">
+			<ion-label class="ion-text-wrap">
+				<h3>{{ item.title }}</h3>
+			</ion-label>
+		</ion-item>
+	</ion-list>
+</ion-content>

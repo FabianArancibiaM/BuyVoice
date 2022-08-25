@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IInfoCardMenu } from '../interfaces/IMenu.interface';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { IonNav, NavController } from '@ionic/angular';
+import { IInfoCardMenu } from '../../interfaces/IMenu.interface';
 
 @Component({
   selector: 'app-card-main',
@@ -11,13 +12,14 @@ export class CardMainComponent implements OnInit {
   @Input() defaultData: IInfoCardMenu;
   @Output() callBack = new EventEmitter<string>();
 
-  constructor() { }
+  constructor(
+    private navCtrl: NavController
+  ) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
-  onClick(url: string){
-    console.log(url)
-    this.callBack.emit(url);
+  onClick(url){
+    this.navCtrl.navigateForward([url]);
   }
 
 }

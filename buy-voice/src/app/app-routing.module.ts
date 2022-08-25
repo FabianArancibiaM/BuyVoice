@@ -10,7 +10,8 @@ const routes: Routes = [
   {
     path: 'folder/:id',
     loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
-  },  {
+  },
+  {
     path: 'reporte',
     loadChildren: () => import('./reporte/reporte.module').then( m => m.ReportePageModule)
   },
@@ -48,7 +49,11 @@ const routes: Routes = [
   },
   {
     path: 'menu-principal',
-    loadChildren: () => import('./menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
+    loadChildren: () => import('./menu/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
+  },
+  {
+    path: 'menu-secundario',
+    loadChildren: () => import('./menu/menu-secundario/menu-secundario.module').then( m => m.MenuSecundarioPageModule)
   }
 
 ];
