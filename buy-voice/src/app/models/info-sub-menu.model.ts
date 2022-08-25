@@ -10,7 +10,6 @@ export class InfoSubMenu {
 
     constructor() { }
 
-
     set title(v: string) {
         this._title = v;
     }

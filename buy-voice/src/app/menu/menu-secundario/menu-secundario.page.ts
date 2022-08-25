@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { NavController } from '@ionic/angular';
 import { InfoMenu } from 'src/app/models/info-menu.model';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-menu-secundario',
@@ -9,11 +10,18 @@ import { InfoMenu } from 'src/app/models/info-menu.model';
 })
 export class MenuSecundarioPage implements OnInit {
 
-  constructor(private route: ActivatedRoute, private infoMenu: InfoMenu) { }
+  public dataChildren: Array<InfoSubMenu> = new Array<InfoSubMenu>;
+  public title: string;
+
+  constructor(private infoMenu: InfoMenu, private navCtrl: NavController) { }
 
   ngOnInit() {
-    console.log(this.infoMenu.title);
-    console.log(this.route.snapshot.params.children[0]);
+    this.dataChildren = this.infoMenu.children;
+    this.title = this.infoMenu.title;
+  }
+
+  redirectTo(card: InfoSubMenu ){
+    this.navCtrl.navigateForward([card.url]);
   }
 
 }

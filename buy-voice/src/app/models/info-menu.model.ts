@@ -13,7 +13,7 @@ export class InfoMenu {
         this._title = v;
     }
 
-    set children(v: any) {
+    set children(v: Array<InfoSubMenu>) {
         this._children = v;
     }
 

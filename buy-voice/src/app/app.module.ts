@@ -11,7 +11,9 @@ import { InfoMenu } from './models/info-menu.model';
 
 @NgModule({
   declarations: [AppComponent, ReportePipe],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot({
+    backButtonText : 'Volver'
+  }), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },InfoMenu],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]

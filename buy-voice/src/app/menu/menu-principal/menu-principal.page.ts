@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { InfoMenu } from 'src/app/models/info-menu.model';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 import { IInfoCardMenu } from '../../interfaces/IMenu.interface';
 
 @Component({
@@ -38,8 +39,15 @@ export class MenuPrincipalPage implements OnInit {
 
   redirectTo(card: IInfoCardMenu ){
     this.infoMenu.title = card.title;
-    this.infoMenu.children = card.children;
-    this.navCtrl.navigateForward(['menu-secundario', card]);
+    let listSubCard = new Array<InfoSubMenu>;
+    card.children.forEach( data => {
+      let obj = new InfoSubMenu();
+      obj.title = data.title;
+      obj.url = data.url;
+      listSubCard.push(obj);
+    })
+    this.infoMenu.children = listSubCard;
+    this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario': listSubCard[0].url]);
   }
 
 }

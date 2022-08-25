@@ -18,7 +18,6 @@ import { InfoMenu } from 'src/app/models/info-menu.model';
     MenuPrincipalPageRoutingModule,
     CardMainModule
   ],
-  providers:[InfoMenu],
   declarations: [MenuPrincipalPage],
   schemas: [NO_ERRORS_SCHEMA]
 })

@@ -1,13 +1,9 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { IonicModule } from '@ionic/angular';
-
 import { MenuSecundarioPageRoutingModule } from './menu-secundario-routing.module';
-
 import { MenuSecundarioPage } from './menu-secundario.page';
-import { InfoMenu } from 'src/app/models/info-menu.model';
 
 @NgModule({
   imports: [
@@ -16,7 +12,7 @@ import { InfoMenu } from 'src/app/models/info-menu.model';
     IonicModule,
     MenuSecundarioPageRoutingModule
   ],
-  providers:[InfoMenu],
-  declarations: [MenuSecundarioPage]
+  declarations: [MenuSecundarioPage],
+  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
 })
 export class MenuSecundarioPageModule {}
