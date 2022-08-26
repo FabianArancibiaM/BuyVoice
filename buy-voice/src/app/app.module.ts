@@ -12,7 +12,7 @@ import { InfoMenu } from './models/info-menu.model';
 @NgModule({
   declarations: [AppComponent, ReportePipe],
   imports: [BrowserModule, IonicModule.forRoot({
-    backButtonText : 'Volver'
+    backButtonText : ''
   }), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },InfoMenu],
   bootstrap: [AppComponent],

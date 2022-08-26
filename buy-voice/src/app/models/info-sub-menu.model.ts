@@ -18,11 +18,11 @@ export class InfoSubMenu {
         this._url = v;
     }
 
-    get title(): string {
+    get title() {
         return this._title;
     }
 
-    get url(): string {
+    get url() {
         return this._url;
     }
 

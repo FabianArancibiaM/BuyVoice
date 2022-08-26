@@ -1,3 +1,4 @@
+import { TablaGenericaModule } from './../../componentes/tabla-generica/card-main.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,7 +14,8 @@ import { NuevaCompraPage } from './nueva-compra.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    NuevaCompraPageRoutingModule
+    NuevaCompraPageRoutingModule,
+    TablaGenericaModule
   ],
   declarations: [NuevaCompraPage]
 })

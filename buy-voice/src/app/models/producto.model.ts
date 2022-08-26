@@ -4,13 +4,13 @@ import { Injectable } from "@angular/core";
 @Injectable({
     providedIn: 'root',
 })
-export class Producto {
+export class ProductoModel {
     private _nombre: string;
 	private _medicion: string;
-	private _cantidad: Number;
-	private _precioCompra: Number;
-	private _precioVenta: Number;
-	private _merma: Number;
+	private _cantidad: number;
+	private _precioCompra: number;
+	private _precioVenta: number;
+	private _merma: number;
 
     constructor(){}
 
@@ -39,16 +39,16 @@ export class Producto {
     set medicion(v: string){
         this._medicion = v;
     }
-    set cantidad(v: Number){
+    set cantidad(v: number){
         this._cantidad = v;
     }
-    set precioCompra(v: Number){
+    set precioCompra(v: number){
         this._precioCompra = v;
     }
-    set precioVenta(v: Number){
+    set precioVenta(v: number){
         this._precioVenta = v;
     }
-    set merma(v: Number){
+    set merma(v: number){
         this._merma = v;
     }
 

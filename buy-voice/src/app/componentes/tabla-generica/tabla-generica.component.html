@@ -1,0 +1,16 @@
+<ion-grid class="table">
+  <ion-row class="tableTitle">
+    <ion-col *ngFor="let item of titleTable[typeTable]">
+      {{item}}
+    </ion-col>
+  </ion-row>
+  <ion-row class="tableBody" *ngFor="let item of dataTable">
+    <ion-col *ngFor="let str of item">
+      {{str}}
+    </ion-col>
+  </ion-row>
+  <ion-row class="tableBody">
+    <ion-col *ngFor="let item of titleTable[typeTable]">
+    </ion-col>
+  </ion-row>
+</ion-grid>

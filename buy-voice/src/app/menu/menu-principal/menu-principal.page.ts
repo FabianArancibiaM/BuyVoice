@@ -38,9 +38,9 @@ export class MenuPrincipalPage implements OnInit {
 
   redirectTo(card: IInfoCardMenu ){
     this.infoMenu.title = card.title;
-    let listSubCard = new Array<InfoSubMenu>;
+    const listSubCard = new Array<InfoSubMenu>();
     card.children.forEach( data => {
-      let obj = new InfoSubMenu();
+      const obj = new InfoSubMenu();
       obj.title = data.title;
       obj.url = data.url;
       listSubCard.push(obj);
