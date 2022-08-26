@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 import { InfoSubMenu } from './info-sub-menu.model';
-/* eslint-disable no-underscore-dangle */
 @Injectable({
     providedIn: 'root',
 })
@@ -17,7 +19,7 @@ export class InfoMenu {
         this._children = v;
     }
 
-    get title(): string {
+    get title() {
         return this._title;
     }
 

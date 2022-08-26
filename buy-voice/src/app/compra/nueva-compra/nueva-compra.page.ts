@@ -1,7 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductoModel } from 'src/app/models/producto.model';
 import { CompraService } from 'src/app/service/compra.service';
-import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nueva-compra',

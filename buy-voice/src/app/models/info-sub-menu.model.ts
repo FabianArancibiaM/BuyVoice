@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable no-underscore-dangle */
 import { Injectable } from '@angular/core';
 
-/* eslint-disable no-underscore-dangle */
 @Injectable({
     providedIn: 'root',
 })

@@ -1,4 +1,5 @@
-import { Injectable } from "@angular/core";
+/* eslint-disable @typescript-eslint/adjacent-overload-signatures */
+import { Injectable } from '@angular/core';
 
 /* eslint-disable no-underscore-dangle */
 @Injectable({
