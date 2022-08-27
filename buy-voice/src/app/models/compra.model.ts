@@ -14,6 +14,21 @@ export class CompraModel {
     constructor(){
         this._listaCompra = new Array<ProductoModel>();
         this._historialCompra = new Array<InfoCompra>();
+        const p = new ProductoModel();
+        p.nombre = 'Pera';
+        p.precioCompra = 54000;
+        p.medicion = 'kilos';
+        p.cantidad = 54;
+        this._listaCompra.push(p);
+        this._listaCompra.push(p);
+        this._listaCompra.push(p);
+        this._historialCompra.push(new InfoCompra(this._listaCompra, new Date()));
+        this._historialCompra.push(new InfoCompra(this._listaCompra, new Date()));
+        this._historialCompra.push(new InfoCompra(this._listaCompra, new Date()));
+    }
+
+    public get historialCompra() {
+        return this._historialCompra;
     }
 
     agregarNuevoHistorial(){

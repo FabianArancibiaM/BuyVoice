@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CompraExistentePageRoutingModule } from './compra-existente-routing.module';
 
 import { CompraExistentePage } from './compra-existente.page';
+import { TablaGenericaModule } from 'src/app/componentes/tabla-generica/card-main.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CompraExistentePageRoutingModule
+    CompraExistentePageRoutingModule,
+    TablaGenericaModule
   ],
   declarations: [CompraExistentePage]
 })
