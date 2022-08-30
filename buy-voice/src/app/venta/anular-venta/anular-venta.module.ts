@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AnularVentaPageRoutingModule } from './anular-venta-routing.module';
 
 import { AnularVentaPage } from './anular-venta.page';
+import { TablaGenericaModule } from 'src/app/componentes/tabla-generica/card-main.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AnularVentaPageRoutingModule
+    AnularVentaPageRoutingModule,
+    TablaGenericaModule
   ],
   declarations: [AnularVentaPage]
 })

@@ -1,12 +1,25 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
+	<ion-toolbar>
+		<ion-buttons slot="start">
 			<ion-back-button></ion-back-button>
 		</ion-buttons>
-    <ion-title>anular-venta</ion-title>
-  </ion-toolbar>
+		<ion-title>anular-venta</ion-title>
+	</ion-toolbar>
 </ion-header>
-
 <ion-content>
-
-</ion-content>
+	<div class="divBuscador">
+	  <ion-list>
+		<ion-item>
+		  <ion-select interface="popover" placeholder="Seleccione una fecha" (ionChange)="buscarCompra($event)">
+			<ion-select-option *ngFor="let data of listaFecha;let i = index" value="{{data}}">{{data}}</ion-select-option>
+		  </ion-select>
+		</ion-item>
+	  </ion-list>
+	</div>
+	<div class="divTable">
+	  <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable" (eventClick)="eventClick($event)"></app-tabla-generica>
+	</div>
+	<div class="divTotal">
+	  <h2>Total: ${{montoTotal}}</h2>
+	</div>
+	</ion-content>

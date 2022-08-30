@@ -8,5 +8,16 @@
 </ion-header>
 
 <ion-content>
-
+  <div class="divTable">
+    <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable"></app-tabla-generica>
+  </div>
+  <div class="divTextArea">
+    <h2>{{montoTotal}}</h2>
+    <ion-textarea class="textArea"></ion-textarea>
+  </div>
+  <div class="divRecord">
+    <ion-button class="buttonRecord" (click)="nuevaVenta()">
+      <ion-icon class="mic" name="mic"></ion-icon>
+    </ion-button>
+  </div>
 </ion-content>

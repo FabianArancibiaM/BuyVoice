@@ -1,56 +1,65 @@
 /* eslint-disable @typescript-eslint/adjacent-overload-signatures */
-import { Injectable } from '@angular/core';
-
 /* eslint-disable no-underscore-dangle */
+import { Injectable } from '@angular/core';
+import { INombreCategoria } from '../interfaces/Igeneral.interface';
+
 @Injectable({
     providedIn: 'root',
 })
 export class ProductoModel {
+
     private _nombre: string;
-	private _medicion: string;
-	private _cantidad: number;
-	private _precioCompra: number;
-	private _precioVenta: number;
-	private _merma: number;
+    private _tipoPago: string;
+    private _precioVenta: number;
+    private _subTotalPago: number;
+    private _tipoUnidadVenta: string;
+    private _tipoUnidadCompra: string;
+    private _categoriaUnidad: INombreCategoria;
 
     constructor(){}
 
     get nombre(){
         return this._nombre;
     }
-    get medicion(){
-        return this._medicion;
+    get tipoPago(){
+        return this._tipoPago;
     }
-    get cantidad(){
-        return this._cantidad;
+    get tipoUnidadVenta(){
+        return this._tipoUnidadVenta;
     }
-    get precioCompra(){
-        return this._precioCompra;
+    get tipoUnidadCompra(){
+        return this._tipoUnidadCompra;
     }
     get precioVenta(){
         return this._precioVenta;
     }
-    get merma(){
-        return this._merma;
+    get categoriaUnidad(){
+        return this._categoriaUnidad;
+    }
+    get subTotalPago(){
+        return this._subTotalPago;
     }
 
     set nombre(v: string){
         this._nombre = v;
     }
-    set medicion(v: string){
-        this._medicion = v;
+    set tipoPago(v: string){
+        this._tipoPago = v;
     }
-    set cantidad(v: number){
-        this._cantidad = v;
+    set tipoUnidadVenta(v: string){
+        this._tipoUnidadVenta = v;
     }
-    set precioCompra(v: number){
-        this._precioCompra = v;
+    set tipoUnidadCompra(v: string){
+        this._tipoUnidadCompra = v;
+    }
+    set categoriaUnidad(v: INombreCategoria){
+        this._categoriaUnidad = v;
     }
     set precioVenta(v: number){
         this._precioVenta = v;
     }
-    set merma(v: number){
-        this._merma = v;
+    set subTotalPago(v: number){
+        this._subTotalPago = v;
     }
 
 

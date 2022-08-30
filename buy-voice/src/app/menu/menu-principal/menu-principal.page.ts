@@ -12,9 +12,9 @@ import { IInfoCardMenu } from '../../interfaces/IMenu.interface';
 export class MenuPrincipalPage implements OnInit {
 
   public listCard: IInfoCardMenu[] = [
-    { title: 'Compra', children: [
+    { title: 'Mis Compras', children: [
       {title: 'Nueva Compra', url: '/nueva-compra'},
-      {title: 'Compra Existente', url: '/compra-existente'},
+      {title: 'Compras Realizadas', url: '/compra-existente'},
       {title: 'Anular Compra', url: '/anular-compra'}
     ] },
     { title: 'Ventas', children: [
@@ -44,7 +44,7 @@ export class MenuPrincipalPage implements OnInit {
       obj.title = data.title;
       obj.url = data.url;
       listSubCard.push(obj);
-    })
+    });
     this.infoMenu.children = listSubCard;
     this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario': listSubCard[0].url]);
   }
