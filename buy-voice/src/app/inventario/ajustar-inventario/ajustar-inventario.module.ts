@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { AjustarInventarioPageRoutingModule } from './ajustar-inventario-routing.module';
 
 import { AjustarInventarioPage } from './ajustar-inventario.page';
+import { ModalGenericoModule } from 'src/app/componentes/modal-generico/modal-generico.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AjustarInventarioPageRoutingModule
+    AjustarInventarioPageRoutingModule,
+    ModalGenericoModule
   ],
   declarations: [AjustarInventarioPage]
 })

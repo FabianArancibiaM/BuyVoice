@@ -12,8 +12,8 @@ export class ProductoModel {
     private _tipoPago: string;
     private _precioVenta: number;
     private _subTotalPago: number;
-    private _tipoUnidadVenta: string;
-    private _tipoUnidadCompra: string;
+    private _tipoUnidadVenta: number;
+    private _tipoUnidadCompra: number;
     private _categoriaUnidad: INombreCategoria;
 
     constructor(){}
@@ -46,10 +46,10 @@ export class ProductoModel {
     set tipoPago(v: string){
         this._tipoPago = v;
     }
-    set tipoUnidadVenta(v: string){
+    set tipoUnidadVenta(v: number){
         this._tipoUnidadVenta = v;
     }
-    set tipoUnidadCompra(v: string){
+    set tipoUnidadCompra(v: number){
         this._tipoUnidadCompra = v;
     }
     set categoriaUnidad(v: INombreCategoria){
