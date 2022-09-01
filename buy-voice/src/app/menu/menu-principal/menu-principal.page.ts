@@ -1,8 +1,11 @@
+/* eslint-disable no-underscore-dangle */
+import { FirestoreService } from './../../dataBase/firestore.service';
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { InfoMenu } from 'src/app/models/info-menu.model';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 import { IInfoCardMenu } from '../../interfaces/IMenu.interface';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu-principal',
@@ -31,10 +34,18 @@ export class MenuPrincipalPage implements OnInit {
     ] }
   ];
 
-  constructor(private navCtrl: NavController, private infoMenu: InfoMenu) { }
+  constructor(private navCtrl: NavController, private infoMenu: InfoMenu, private _firestore: FirestoreService) { }
 
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._firestore.getAll().subscribe(data => {
+      console.log(data)
+    }, err => {
+      console.log(err)
+    });
+    this._firestore.get().pipe(first()).subscribe(data => this._firestore.create(data).then(datas => console.log(datas)))
+    
+  }
 
   redirectTo(card: IInfoCardMenu ){
     this.infoMenu.title = card.title;

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "757525006618",
+    "firebase_url": "https://primerapp-8b521.firebaseio.com",
+    "project_id": "primerapp-8b521",
+    "storage_bucket": "primerapp-8b521.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:757525006618:android:e528068356bee010e904a3",
+        "android_client_info": {
+          "package_name": "com.speaknow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "757525006618-7o12dqkdus7bcp29gb6smd3tn8fnf855.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvQPhOTqfpBVlVwAZV__TMLPK7ijbjc-Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "757525006618-7o12dqkdus7bcp29gb6smd3tn8fnf855.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,14 +8,21 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ReportePipe } from './reporte.pipe';
 import { InfoMenu } from './models/info-menu.model';
+import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
+import { environment } from '../environments/environment';
+import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 
 @NgModule({
   declarations: [AppComponent, ReportePipe],
-  imports: [BrowserModule, IonicModule.forRoot({
-    backButtonText : ''
-  }), AppRoutingModule],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },InfoMenu],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot({ backButtonText: '' }),
+    AppRoutingModule,
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore())
+  ],
+  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }, InfoMenu],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule {}
+export class AppModule { }

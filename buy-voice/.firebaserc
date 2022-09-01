@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "primerapp-8b521"
+  },
+  "targets": {
+    "primerapp-8b521": {
+      "hosting": {
+        "app": [
+          "primerapp-8b521"
+        ]
+      }
+    }
+  }
+}
