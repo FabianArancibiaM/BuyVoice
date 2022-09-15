@@ -15,5 +15,5 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor(private com: ComercioService) {com.llenadoPrevio()}
+  constructor() {}
 }

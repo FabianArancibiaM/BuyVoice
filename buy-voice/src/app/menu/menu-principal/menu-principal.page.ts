@@ -1,3 +1,4 @@
+import { concat, Observable } from 'rxjs';
 /* eslint-disable no-underscore-dangle */
 import { FirestoreService } from './../../dataBase/firestore.service';
 import { Component, OnInit } from '@angular/core';
@@ -6,6 +7,9 @@ import { InfoMenu } from 'src/app/models/info-menu.model';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 import { IInfoCardMenu } from '../../interfaces/IMenu.interface';
 import { first } from 'rxjs/operators';
+import { combineLatest, forkJoin } from 'rxjs';
+import { ComercioService } from 'src/app/service/comercio.service';
+import { NegocioModel } from 'src/app/models/negocio.model';
 
 @Component({
   selector: 'app-menu-principal',
@@ -34,30 +38,27 @@ export class MenuPrincipalPage implements OnInit {
     ] }
   ];
 
-  constructor(private navCtrl: NavController, private infoMenu: InfoMenu, private _firestore: FirestoreService) { }
-
+  constructor(private navCtrl: NavController, private infoMenu: InfoMenu, private _comercio: ComercioService, private _infoNegocio: NegocioModel) { }
 
   ngOnInit() {
-    this._firestore.getAll().subscribe(data => {
-      console.log(data)
-    }, err => {
-      console.log(err)
-    });
-    this._firestore.get().pipe(first()).subscribe(data => this._firestore.create(data).then(datas => console.log(datas)))
-    
+    console.log('inicio fork')
+    this._comercio.getInfoNegocio('fabian', 'Admin');
   }
 
   redirectTo(card: IInfoCardMenu ){
-    this.infoMenu.title = card.title;
-    const listSubCard = new Array<InfoSubMenu>();
-    card.children.forEach( data => {
-      const obj = new InfoSubMenu();
-      obj.title = data.title;
-      obj.url = data.url;
-      listSubCard.push(obj);
-    });
-    this.infoMenu.children = listSubCard;
-    this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario': listSubCard[0].url]);
+    console.log(this._infoNegocio.nombre)
+    this._comercio.getInventario();
+    this._comercio.getVentas();
+    // this.infoMenu.title = card.title;
+    // const listSubCard = new Array<InfoSubMenu>();
+    // card.children.forEach( data => {
+    //   const obj = new InfoSubMenu();
+    //   obj.title = data.title;
+    //   obj.url = data.url;
+    //   listSubCard.push(obj);
+    // });
+    // this.infoMenu.children = listSubCard;
+    // this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario': listSubCard[0].url]);
   }
 
 }
