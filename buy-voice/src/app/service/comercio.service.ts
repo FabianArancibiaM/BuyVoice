@@ -61,9 +61,9 @@ export class ComercioService {
     const listaVentas = new Array<CompraVentaModel>();
     this._firestore.getAllVenta(this._infoNegocio.id).subscribe(
       data => {
-        const llaves = Object.keys(data).filter(k => k === 'id');
+        const llaves = Object.keys(data).filter(k => k !== 'id');
         llaves.forEach(k => {
-          data['22-01-2020'].forEach( vnt => {
+          data[k].forEach( vnt => {
             const nuevaVnt = new CompraVentaModel();
             nuevaVnt.comerciante = this._infoNegocio.usuario.find(usu => usu.id === vnt.id_usuario);
             nuevaVnt.fecha = new Date(vnt.fecha);
