@@ -10,7 +10,7 @@ import { InventarioModel } from './inventario.model';
 export class ProductoComunModel {
     private _id: number;
     private _inventario: InventarioModel;
-    private _precioVenta: number;
+    private _precioVentaCompra: number;
     private _cantidad: number;
     private _unidadMedidaVenta: string;
 
@@ -22,17 +22,17 @@ export class ProductoComunModel {
     public set id(v: number) {
         this._id = v;
     }
-    public get idInventario() {
+    public get inventario() {
         return this._inventario;
     }
-    public set idInventario(v: InventarioModel) {
+    public set inventario(v: InventarioModel) {
         this._inventario = v;
     }
-    public get precioVenta() {
-        return this._precioVenta;
+    public get precioVentaCompra() {
+        return this._precioVentaCompra;
     }
-    public set precioVenta(v: number) {
-        this._precioVenta = v;
+    public set precioVentaCompra(v: number) {
+        this._precioVentaCompra = v;
     }
     public get cantidad() {
         return this._cantidad;

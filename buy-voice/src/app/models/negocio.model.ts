@@ -10,7 +10,7 @@ import { UsuarioModel } from './usuario.model';
 export class NegocioModel {
     private _id: string;
     private _nombre: string;
-    private _usuario: Array<UsuarioModel> = new Array<UsuarioModel>();
+    private _usuarios: Array<UsuarioModel> = new Array<UsuarioModel>();
 
     constructor(){}
 
@@ -20,11 +20,11 @@ export class NegocioModel {
     public set id(v: string) {
         this._id = v;
     }
-    public get usuario() {
-        return this._usuario;
+    public get usuarios() {
+        return this._usuarios;
     }
-    public set usuario(v: Array<UsuarioModel>) {
-        this._usuario = v;
+    public set usuarios(v: Array<UsuarioModel>) {
+        this._usuarios = v;
     }
     public get nombre() {
         return this._nombre;

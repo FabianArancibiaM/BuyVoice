@@ -12,10 +12,11 @@ import { ProductoComunModel } from './producto-comun.model';
 export class CompraVentaModel {
     private _id: number;
     private _negocio: NegocioModel;
-    private _fecha: Date;
-    private _totalVenta: number;
+    private _fecha: string;
+    private _totalVentaCompra: number;
     private _usuario: UsuarioModel;
-    private _detalleProductos: Array<ProductoComunModel>;
+    private _estado: string;
+    private _detalleProductos: Array<ProductoComunModel> = new Array<ProductoComunModel>();
 
     constructor(){}
 
@@ -34,14 +35,20 @@ export class CompraVentaModel {
     public get fecha() {
         return this._fecha;
     }
-    public set fecha(v: Date) {
+    public set fecha(v: string) {
         this._fecha = v;
     }
-    public get totalVenta() {
-        return this._totalVenta;
+    public get estado() {
+        return this._estado;
     }
-    public set totalVenta(v: number) {
-        this._totalVenta = v;
+    public set estado(v: string) {
+        this._estado = v;
+    }
+    public get totalVentaCompra() {
+        return this._totalVentaCompra;
+    }
+    public set totalVentaCompra(v: number) {
+        this._totalVentaCompra = v;
     }
     public get comerciante() {
         return this._usuario;

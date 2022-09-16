@@ -11,6 +11,7 @@ export class UsuarioModel {
     private _perfil: string;
     private _clave: string;
     private _id: number;
+    private _activo: boolean;
 
     constructor(){}
 
@@ -19,6 +20,12 @@ export class UsuarioModel {
     }
     public set id(v: number) {
         this._id = v;
+    }
+    public get activo() {
+        return this._activo;
+    }
+    public set activo(v: boolean) {
+        this._activo = v;
     }
     public get nombre() {
         return this._nombre;
