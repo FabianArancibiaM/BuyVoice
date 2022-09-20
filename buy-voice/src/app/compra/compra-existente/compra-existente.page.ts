@@ -14,11 +14,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
   public listaFecha: string[] = [];
   public dataTable: any[] = [];
   public titleTable = [
-    'Nombre Producto',
-    'Medición',
-    'Cantidad',
-    'Precio',
-    'Opción'
+    'Total compra',
+    'Cantidad de productos',
+    'Estado',
+    ''
   ];
   public montoTotal = 0;
   private _promesa: Subscription[];
@@ -47,18 +46,15 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this.dataTable = [];
     this._nuevaVnt.forEach( comp => {
       if(comp.fecha === fecha.detail.value){
-        comp.detalleProductos.forEach( prod => {
-          this.dataTable.push(
-            [
-              prod.inventario.nombre,
-              prod.inventario.unidadMedida,
-              prod.cantidad,
-              prod.precioVentaCompra,
-              comp.estado !== 'anulado' ?'Anular' : 'Anulada'
-            ]
-          );
-          this.montoTotal = this.montoTotal + (prod.precioVentaCompra * prod.cantidad);
-        });
+        // comp.detalleProductos.forEach( prod => {});
+        this.dataTable.push(
+          [
+            comp.totalVentaCompra,
+            comp.detalleProductos.length,
+            comp.estado,
+            comp.estado === 'Anulado' ? '' : 'Editar'
+          ]
+        );
       }
     });
   }

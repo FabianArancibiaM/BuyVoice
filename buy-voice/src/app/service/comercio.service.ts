@@ -164,7 +164,7 @@ export class ComercioService {
             total_compra: nuevaCompra.totalVentaCompra,
             id_usuario: nuevaCompra.comerciante.id,
             fecha: `${dia}/${mes}/${anno}`,
-            estado: 'ejecutado',
+            estado: 'realizado',
             detalle_productos: nuevaCompra.detalleProductos.map(prod => ({
               cantidad: prod.cantidad,
               id_inventario: prod.inventario.id,
@@ -202,7 +202,7 @@ export class ComercioService {
             total_venta: nuevaVenta.totalVentaCompra,
             id_usuario: nuevaVenta.comerciante.id,
             fecha: `${dia}/${mes}/${anno}`,
-            estado: 'ejecutado',
+            estado: 'realizado',
             detalle_productos: nuevaVenta.detalleProductos.map(prod => ({
               cantidad: prod.cantidad,
               id_inventario: prod.inventario.id,

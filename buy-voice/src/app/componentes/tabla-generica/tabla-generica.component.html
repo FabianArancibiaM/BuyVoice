@@ -1,19 +1,19 @@
-<ion-grid class="table">
+<ion-grid  class="table">
   <ion-row class="tableTitle">
-    <ion-col *ngFor="let item of titleTable">
+    <ion-col *ngFor="let item of titleTable" size="3" >
       <div>{{item}}</div>
     </ion-col>
   </ion-row>
   <ion-row class="tableBody" *ngFor="let item of dataTable; let i = index">
-    <ion-col *ngFor="let str of item">
+    <ion-col *ngFor="let str of item" size="3">
       <div>
-        <o *ngIf="str !== 'editar' && str !== 'Anular' ">{{str}}</o>
-        <ion-button *ngIf="str === 'editar' || str === 'Anular' " (click)="eventoBoton(str+'-'+i)">{{str}}</ion-button>
+        <o *ngIf="str !== 'Editar' && str !== 'Anular' ">{{str}}</o>
+        <ion-button size="small" *ngIf="str === 'Editar' || str === 'Anular' || str === 'Ver detalle' " (click)="eventoBoton(str+'-'+i)">{{str}}</ion-button>
       </div>
     </ion-col>
   </ion-row>
-  <ion-row class="tableBody">
+  <!-- <ion-row class="tableBody">
     <ion-col *ngFor="let item of titleTable">
     </ion-col>
-  </ion-row>
+  </ion-row> -->
 </ion-grid>

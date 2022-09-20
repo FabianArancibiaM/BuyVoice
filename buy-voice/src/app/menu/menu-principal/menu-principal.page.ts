@@ -51,39 +51,11 @@ export class MenuPrincipalPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('inicio fork')
     this._comercio.getInfoNegocio('fabian', 'Admin').subscribe(data =>
       this._comercio.getInventario().subscribe(dta => console.log('getInventario')));
   }
 
   redirectTo(card: IInfoCardMenu) {
-    console.log(this._infoNegocio.nombre)
-
-    // if (card.title == 'Inventario' ){
-    //   this._comercio.getInventario().subscribe(dta => {
-    //     console.log('getInventario')
-    //   });
-    // }
-    // if (card.title == 'Mis Compras' ){
-    //   this._comercio.getCompras().pipe(take(1)).subscribe( data => {
-    //     console.log('getCompras', data)
-    //     this.obj = data
-    //   });
-    // }
-
-    // if (card.title == 'Ventas' ){
-    //   this._comercio.getVentas().pipe(take(1)).subscribe( data => {
-    //     console.log('getCompras', data)
-    //     this.obj = data
-    //   });
-    // }
-    // if (card.title == 'Reporte' ){
-    //   this._comercio.generarVenta(this.obj.message[0]).subscribe(data2 => console.log('aqui',data2));
-    //   // this._comercio.generarCompra(this.obj.message[0]).subscribe(data2 => console.log('aqui',data2));
-    // }
-
-
-
     this.infoMenu.title = card.title;
     const listSubCard = new Array<InfoSubMenu>();
     card.children.forEach(data => {
