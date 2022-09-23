@@ -1,0 +1,16 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>{{data.title}}</ion-card-title>
+  </ion-card-header>
+  
+  <ion-card-content>
+    <div class="content-details" [innerHTML]="data.detalle"></div>
+    <div class="content-amount">
+      {{data.monto}}
+    </div>
+  </ion-card-content>
+  <ion-item>
+    <ion-button *ngIf="data.flow === 'DEATAIL'" fill="outline" slot="end" (click)="viewDetails()">Ver detalle</ion-button>
+    <ion-button *ngIf="data.flow === 'EDIT'" fill="outline" slot="end" (click)="viewModify()">Modificar</ion-button>
+  </ion-item>
+</ion-card>

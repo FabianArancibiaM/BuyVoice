@@ -8,3 +8,27 @@
 .divTotal{
     text-align: center;
 }
+
+
+
+//-----------
+.content-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.view-list {
+    height: 520px;
+    overflow: scroll;
+    width: 98%;
+}
+.button-return {
+    width: 95%;
+    position: fixed;
+    bottom: 50px;
+}
+.button-cancel {
+    width: 95%;
+    position: fixed;
+    bottom: 10px;
+}
