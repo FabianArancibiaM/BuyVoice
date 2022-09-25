@@ -5,7 +5,6 @@ export interface ICompraVenta {
     title: string;
     detalle: string;
     monto: string;
-    allData: CompraVentaModel;
-    infoProd: ProductoComunModel;
     flow: 'EDIT' | 'DEATAIL';
+    index: number;
 }

@@ -13,49 +13,54 @@ const routes: Routes = [
   },
   {
     path: 'reporte',
-    loadChildren: () => import('./reporte/reporte.module').then( m => m.ReportePageModule)
+    loadChildren: () => import('./components/reporte/reporte.module').then( m => m.ReportePageModule)
   },
   {
     path: 'ver-stock',
-    loadChildren: () => import('./inventario/ver-stock/ver-stock.module').then( m => m.VerStockPageModule)
+    loadChildren: () => import('./components/inventario/ver-stock/ver-stock.module').then( m => m.VerStockPageModule)
   },
   {
     path: 'ajustar-inventario',
-    loadChildren: () => import('./inventario/ajustar-inventario/ajustar-inventario.module').then( m => m.AjustarInventarioPageModule)
+    loadChildren: () =>
+      import('./components/inventario/ajustar-inventario/ajustar-inventario.module').then( m => m.AjustarInventarioPageModule)
   },
   {
     path: 'nueva-compra',
-    loadChildren: () => import('./compra/nueva-compra/nueva-compra.module').then( m => m.NuevaCompraPageModule)
+    loadChildren: () => import('./components/compra/nueva-compra/nueva-compra.module').then( m => m.NuevaCompraPageModule)
   },
   {
     path: 'compra-existente',
-    loadChildren: () => import('./compra/compra-existente/compra-existente.module').then( m => m.CompraExistentePageModule)
+    loadChildren: () => import('./components/compra/compra-existente/compra-existente.module').then( m => m.CompraExistentePageModule)
   },
   {
     path: 'anular-compra',
-    loadChildren: () => import('./compra/anular-compra/anular-compra.module').then( m => m.AnularCompraPageModule)
+    loadChildren: () => import('./components/compra/anular-compra/anular-compra.module').then( m => m.AnularCompraPageModule)
   },
   {
     path: 'nueva-venta',
-    loadChildren: () => import('./venta/nueva-venta/nueva-venta.module').then( m => m.NuevaVentaPageModule)
+    loadChildren: () => import('./components/venta/nueva-venta/nueva-venta.module').then( m => m.NuevaVentaPageModule)
   },
   {
     path: 'venta-existente',
-    loadChildren: () => import('./venta/venta-existente/venta-existente.module').then( m => m.VentaExistentePageModule)
+    loadChildren: () => import('./components/venta/venta-existente/venta-existente.module').then( m => m.VentaExistentePageModule)
   },
   {
     path: 'anular-venta',
-    loadChildren: () => import('./venta/anular-venta/anular-venta.module').then( m => m.AnularVentaPageModule)
+    loadChildren: () => import('./components/venta/anular-venta/anular-venta.module').then( m => m.AnularVentaPageModule)
   },
   {
     path: 'menu-principal',
-    loadChildren: () => import('./menu/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
+    loadChildren: () => import('./components/menu/menu-principal/menu-principal.module').then( m => m.MenuPrincipalPageModule)
   },
   {
     path: 'menu-secundario',
-    loadChildren: () => import('./menu/menu-secundario/menu-secundario.module').then( m => m.MenuSecundarioPageModule)
-  }
-
+    loadChildren: () => import('./components/menu/menu-secundario/menu-secundario.module').then( m => m.MenuSecundarioPageModule)
+  },
+  {
+    path: '**',
+    redirectTo: 'menu-principal',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

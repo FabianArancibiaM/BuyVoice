@@ -70,12 +70,17 @@ export class FirestoreService {
         ));
     }
 
-    update(pokemon) {
-        const pokemonDocumentReference = doc(
-            this.firestore,
-            `pokemon/${pokemon.id}`
-        );
-        return updateDoc(pokemonDocumentReference, { ...pokemon });
+    updateCompra(compra, idNegocio) {
+        return from(updateDoc(
+            doc(this._collectionCompra, idNegocio)
+            , compra
+        ));
+    }
+    updateInventario(inventario, idNegocio) {
+        return from(updateDoc(
+            doc(this._collectionInventario, idNegocio)
+            , inventario
+        ));
     }
 
     delete(id: string) {

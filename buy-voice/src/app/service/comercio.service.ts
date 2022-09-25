@@ -9,6 +9,7 @@ import { NegocioModel } from '../models/negocio.model';
 import { UsuarioModel } from '../models/usuario.model';
 import { InventarioModel } from '../models/inventario.model';
 import { CompraVentaModel } from '../models/compra-venta.model';
+import { DataManagementService } from './data-management.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,10 @@ export class ComercioService {
 
   private _listaInventario: Array<InventarioModel> = new Array<InventarioModel>();
 
-  constructor(private _firestore: FirestoreService, private _infoNegocio: NegocioModel){}
+  constructor(
+    private _firestore: FirestoreService,
+    private _infoNegocio: NegocioModel
+  ){}
 
   getInfoNegocio(nombreUsuario: string, clave: string) {
     const method = (observer) =>{
@@ -89,6 +93,7 @@ export class ComercioService {
               const nuevaVnt = new CompraVentaModel();
               nuevaVnt.comerciante = this._infoNegocio.usuarios.find(usu => usu.id === vnt.id_usuario);
               nuevaVnt.fecha = vnt.fecha;
+              nuevaVnt.id = vnt.id_venta;
               nuevaVnt.totalVentaCompra = vnt.total_venta;
               nuevaVnt.totalVentaCompra = vnt.total_venta;
               nuevaVnt.estado = vnt.estado;
@@ -126,6 +131,7 @@ export class ComercioService {
               const nuevaVnt = new CompraVentaModel();
               nuevaVnt.comerciante = this._infoNegocio.usuarios.find(usu => usu.id === vnt.id_usuario);
               nuevaVnt.fecha = vnt.fecha;
+              nuevaVnt.id = vnt.id_compra;
               nuevaVnt.totalVentaCompra = vnt.total_compra;
               nuevaVnt.estado = vnt.estado;
               const listaPr = new Array<ProductoComunModel>();
@@ -160,7 +166,9 @@ export class ComercioService {
           const anno = fechaActual.getFullYear();
           const stringFecha = `${dia}-${mes}-${anno}`;
           const diaIniciado = data[stringFecha];
+          const idVentas = !diaIniciado ? 1: diaIniciado[diaIniciado.length].id_venta + 1;
           const objCompra = {
+            id_compra: idVentas,
             total_compra: nuevaCompra.totalVentaCompra,
             id_usuario: nuevaCompra.comerciante.id,
             fecha: `${dia}/${mes}/${anno}`,
@@ -198,7 +206,9 @@ export class ComercioService {
           const anno = fechaActual.getFullYear();
           const stringFecha = `${dia}-${mes}-${anno}`;
           const diaIniciado = data[stringFecha];
+          const idVentas = !diaIniciado ? 1: diaIniciado[diaIniciado.length].id_venta + 1;
           const objCompra = {
+            id_venta: idVentas,
             total_venta: nuevaVenta.totalVentaCompra,
             id_usuario: nuevaVenta.comerciante.id,
             fecha: `${dia}/${mes}/${anno}`,
@@ -218,6 +228,61 @@ export class ComercioService {
               observer.next({status: 'NOK', message: 'Se produjo un error'});
             }
           );
+        }, err =>{
+          console.log(err);
+          observer.next({status: 'NOK', message: 'Se produjo un error'});
+        }
+      );
+    };
+    return new Observable(method);
+  }
+
+  updateCompra(management: DataManagementService){
+    const method = (observer) => {
+      this._firestore.getAllCompra(this._infoNegocio.id).pipe(take(1)).subscribe(
+        data => {
+          const fecha = management.selectedTransaction.fecha.replace('/','-').replace('/','-');
+          const trxBD = data[fecha]
+            .find(trx => trx.id_compra === management.selectedTransaction.id)
+            .detalle_productos[management.indexProductSelected];
+          if(
+              management.selectedProduct.cantidad!==trxBD.cantidad
+              || management.selectedProduct.precioVentaCompra!==trxBD.precio_compra
+            ){
+            data[fecha]
+              .find(trx => trx.id_compra === management.selectedTransaction.id)
+              .detalle_productos[management.indexProductSelected] = {
+                cantidad: management.selectedProduct.cantidad,
+                id_inventario: management.selectedProduct.inventario.id,
+                precio_compra: management.selectedProduct.precioVentaCompra,
+              };
+            let suma = 0;
+            data[fecha]
+              .find(trx => trx.id_compra === management.selectedTransaction.id).detalle_productos.forEach(prd => {
+                  suma = suma + (prd.cantidad * prd.precio_compra);
+                });
+            data[fecha]
+              .find(trx => trx.id_compra === management.selectedTransaction.id).total_compra = suma;
+          }
+          this._firestore.updateCompra(data,this._infoNegocio.id ).subscribe( dta => {
+            this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe(dataInv => {
+              const invSelec = dataInv.productos.find(inv => inv.id === management.selectedProduct.inventario.id);
+              if(invSelec.nombre !== management.selectedProduct.inventario.nombre){
+                invSelec.nombre = management.selectedProduct.inventario.nombre;
+                this._firestore.updateInventario(dataInv, this._infoNegocio.id).subscribe(
+                  result => observer.next({status: 'OK', message: ''}), err => {
+                    console.log(err);
+                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                  }
+                );
+              } else {
+                observer.next({status: 'OK', message: ''});
+              }
+            });
+          }, err => {
+            console.log(err);
+            observer.next({status: 'NOK', message: 'Se produjo un error'});
+          });
         }, err =>{
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error'});
