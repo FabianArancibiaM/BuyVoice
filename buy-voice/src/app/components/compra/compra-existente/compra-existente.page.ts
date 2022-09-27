@@ -1,3 +1,4 @@
+import { take } from 'rxjs/operators';
 
 import { from, Subscription } from 'rxjs';
 import { ComercioService } from 'src/app/service/comercio.service';
@@ -29,14 +30,16 @@ export class CompraExistentePage implements OnInit, OnDestroy {
   public showDetails = false;
   public showModal = false;
   public showcardGeneral = true;
-
+  public showSpinner = false;
+  
   public default = {
     title: 'Compra',
     detalle: 'Cantidad de productos: 1 <br> hola',
     monto: '$25.000.-',
     allData: new CompraVentaModel()
   };
-
+  
+  private _dateSelec;
   private _promesa: Subscription[];
   private _nuevaVnt: Array<CompraVentaModel>;
 
@@ -54,13 +57,16 @@ export class CompraExistentePage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.showSpinner = true;
     this._promesa = [];
     this._promesa.push(this._comercio.getInventario().subscribe());
-    this._promesa.push(this._comercio.getCompras().subscribe( (datos) => {
+    this._promesa.push(this._comercio.getCompras().pipe(take(1)).subscribe( (datos) => {
       datos.message.forEach(dts => {
         if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
       });
+      this._nuevaVnt = [];
       this._nuevaVnt = datos.message;
+      this.showSpinner = false;
     }));
   }
 
@@ -79,9 +85,39 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this.showModal = false;
   }
 
-  cancelTransferClick() {}
+  cancelTransferClick() {
+    this.showSpinner = true;
+    this._promesa.push(this._comercio.totalCancellationPurchase(this._management).subscribe( data => {
+      this._promesa.push(this._comercio.getCompras().pipe(take(1)).subscribe( (datos) => {
+        datos.message.forEach(dts => {
+          if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
+        });
+        this._nuevaVnt = [];
+        this._nuevaVnt = datos.message;
+        this.dataCardGeneral = [];
+        this._nuevaVnt.forEach( (comp, index) => {
+          if(comp.fecha === this._dateSelec){
+            const object: ICompraVenta = {
+              title: 'Compra',
+              monto: `${comp.totalVentaCompra}`,
+              detalle: `Cantidad de productos: ${comp.detalleProductos.length}`,
+              flow: 'DEATAIL',
+              index
+            };
+            this.dataCardGeneral.push(
+              object
+            );
+          }
+        });
+        this.showcardGeneral = true;
+        this.showDetails = false;
+        this.showSpinner = false
+      }));
+    }));
+  }
 
   buscarCompra(fecha){
+    this._dateSelec = fecha.detail.value;
     this.montoTotal = 0;
     this.dataCardGeneral = [];
     this._nuevaVnt.forEach( (comp, index) => {
@@ -103,6 +139,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this.showDetails = true;
     this.showcardGeneral = false;
     this.dataCardDetails = [];
+    debugger
     this._management.selectedTransaction = this._nuevaVnt[event];
     this._management.indexTransactionSelected = event;
     this._management.selectedTransaction.detalleProductos.forEach( (data, index) => {
@@ -131,8 +168,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     });
 
     this._promesa.push(from(modal.onDidDismiss()).subscribe(() => {
+      this.showSpinner = true;
       this._promesa.push(this._comercio.getInventario().subscribe());
-      this._promesa.push(this._comercio.getCompras().subscribe( (datos) => {
+      this._promesa.push(this._comercio.getCompras().pipe(take(1)).subscribe( (datos) => {
+        this._nuevaVnt = [];
         this._nuevaVnt = datos.message;
         this._management.selectedTransaction = datos.message.find(compVent =>
           compVent.fecha === this._management.selectedTransaction.fecha
@@ -153,6 +192,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
           };
           this.dataCardDetails.push(object);
         });
+        this.showSpinner = false;
       }));
     }));
     await modal.present();

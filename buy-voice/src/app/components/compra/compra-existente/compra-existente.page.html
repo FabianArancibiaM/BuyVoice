@@ -15,7 +15,9 @@
       </ion-select>
     </ion-item>
   </ion-list>
+  
 </div>
+<ion-spinner *ngIf="showSpinner" name="circular" color="success"></ion-spinner>
 <!-- <div class="divTable">
   <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable" (eventClick)="eventClick($event)"></app-tabla-generica>
 </div>
@@ -25,6 +27,7 @@
 <div *ngIf="showcardGeneral" class="view-list" >
   <app-card-compra-venta *ngFor="let data of dataCardGeneral" [data]="data" (eventClick)="viewDetails($event)" ></app-card-compra-venta>
 </div>
+
 <div *ngIf="showDetails" class="content-details" >
   <div class="view-list" >
     <app-card-compra-venta *ngFor="let data of dataCardDetails" [data]="data" (eventClickInfoProd)="openModalModify($event)" ></app-card-compra-venta>

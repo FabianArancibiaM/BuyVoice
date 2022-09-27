@@ -1,5 +1,5 @@
 import { map,take } from 'rxjs/operators';
-import { of, Observable } from 'rxjs';
+import { of, Observable, throwError } from 'rxjs';
 import { ProductoComunModel } from './../models/producto-comun.model';
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
@@ -166,7 +166,12 @@ export class ComercioService {
           const anno = fechaActual.getFullYear();
           const stringFecha = `${dia}-${mes}-${anno}`;
           const diaIniciado = data[stringFecha];
-          const idVentas = !diaIniciado ? 1: diaIniciado[diaIniciado.length].id_venta + 1;
+          let idVentas = 0;
+          if(!diaIniciado){
+            idVentas = 1;
+          } else {
+            idVentas = diaIniciado.length > 0 ? diaIniciado[diaIniciado.length-1].id_compra + 1 : 1;
+          }
           const objCompra = {
             id_compra: idVentas,
             total_compra: nuevaCompra.totalVentaCompra,
@@ -245,6 +250,8 @@ export class ComercioService {
           const trxBD = data[fecha]
             .find(trx => trx.id_compra === management.selectedTransaction.id)
             .detalle_productos[management.indexProductSelected];
+          let cantProd = 0;
+          const updateCant =  { amountPrev: management.selectedProduct.cantidad, amountNext: trxBD.cantidad};
           if(
               management.selectedProduct.cantidad!==trxBD.cantidad
               || management.selectedProduct.precioVentaCompra!==trxBD.precio_compra
@@ -257,18 +264,19 @@ export class ComercioService {
                 precio_compra: management.selectedProduct.precioVentaCompra,
               };
             let suma = 0;
-            data[fecha]
-              .find(trx => trx.id_compra === management.selectedTransaction.id).detalle_productos.forEach(prd => {
+            data[fecha].find(trx => trx.id_compra === management.selectedTransaction.id).detalle_productos.forEach(prd => {
+                  cantProd = cantProd + prd.cantidad;
                   suma = suma + (prd.cantidad * prd.precio_compra);
                 });
-            data[fecha]
-              .find(trx => trx.id_compra === management.selectedTransaction.id).total_compra = suma;
+            data[fecha].find(trx => trx.id_compra === management.selectedTransaction.id).total_compra = suma;
           }
+
           this._firestore.updateCompra(data,this._infoNegocio.id ).subscribe( dta => {
             this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe(dataInv => {
               const invSelec = dataInv.productos.find(inv => inv.id === management.selectedProduct.inventario.id);
               if(invSelec.nombre !== management.selectedProduct.inventario.nombre){
                 invSelec.nombre = management.selectedProduct.inventario.nombre;
+                invSelec.cantidad_disponible = (invSelec.cantidad_disponible - updateCant.amountPrev) + updateCant.amountNext;
                 this._firestore.updateInventario(dataInv, this._infoNegocio.id).subscribe(
                   result => observer.next({status: 'OK', message: ''}), err => {
                     console.log(err);
@@ -282,6 +290,43 @@ export class ComercioService {
           }, err => {
             console.log(err);
             observer.next({status: 'NOK', message: 'Se produjo un error'});
+          });
+        }, err =>{
+          console.log(err);
+          observer.next({status: 'NOK', message: 'Se produjo un error'});
+        }
+      );
+    };
+    return new Observable(method);
+  }
+
+  totalCancellationPurchase(management: DataManagementService){
+    const method = (observer) => {
+      this._firestore.getAllCompra(this._infoNegocio.id).pipe(take(1)).subscribe(
+        data => {
+          const fecha = management.selectedTransaction.fecha.replace('/','-').replace('/','-');
+          debugger
+          const newData = data[fecha].find(trx => trx.id_compra === management.selectedTransaction.id);
+          this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe( invProd => {
+            console.log('invProd', invProd)
+            newData.detalle_productos.forEach( detProd => {
+              const search = invProd.productos.find( x => x.id === detProd.id_inventario);
+              search.cantidad_disponible = search.cantidad_disponible - detProd.cantidad;
+            });
+            this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
+              result => {
+                data[fecha] = data[fecha].filter(trx => trx.id_compra !== management.selectedTransaction.id);
+                this._firestore.updateCompra(data,this._infoNegocio.id ).subscribe( dta => {
+                  console.log(dta);
+                  observer.next({status: 'OK', message: ''});
+                }, err => {
+                  console.log(err);
+                  observer.next({status: 'NOK', message: 'Se produjo un error'});
+                });
+              }, err => {
+                console.log(err);
+                observer.next({status: 'NOK', message: 'Se produjo un error'});
+              });
           });
         }, err =>{
           console.log(err);

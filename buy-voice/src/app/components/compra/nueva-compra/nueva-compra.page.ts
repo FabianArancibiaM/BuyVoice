@@ -25,6 +25,7 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   public dataTable: any[];
   private _promesa: Subscription[];
   private _listaProdCmpra = new Array<ProductoComunModel>();
+  public showSpinner = false;
 
   constructor(private _comercio: ComercioService, private _infoNegocio: NegocioModel) { }
 
@@ -53,11 +54,15 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   }
 
   registrar(){
+    this.showSpinner = true;
     const comp = new CompraVentaModel();
     comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
     comp.totalVentaCompra = this.montoTotal;
     comp.detalleProductos = this._listaProdCmpra;
-    const sus = this._comercio.generarCompra(comp).subscribe(data2 => console.log('aqui',data2));
+    const sus = this._comercio.generarCompra(comp).subscribe(data2 => {
+      console.log('aqui',data2);
+      this.showSpinner = false;
+    });
     this._promesa.push(sus);
   }
 
