@@ -8,6 +8,10 @@ import { VentaExistentePageRoutingModule } from './venta-existente-routing.modul
 
 import { VentaExistentePage } from './venta-existente.page';
 import { TablaGenericaModule } from 'src/app/ui/tabla-generica/card-main.module';
+import { ModalGenericoModule } from 'src/app/ui/modal-generico/modal-generico.module';
+import { ModalEditProductsModule } from 'src/app/ui/modal-edit-products/modal-edit-products.module';
+import { DetalleCardCompraVentaModule } from 'src/app/ui/detalle-card-compra-venta/detalle-card-compra-venta.module';
+import { CardCompraVentaModule } from 'src/app/ui/card-compra-venta/card-compra-venta.module';
 
 @NgModule({
   imports: [
@@ -15,7 +19,11 @@ import { TablaGenericaModule } from 'src/app/ui/tabla-generica/card-main.module'
     FormsModule,
     IonicModule,
     VentaExistentePageRoutingModule,
-    TablaGenericaModule
+    TablaGenericaModule,
+    CardCompraVentaModule,
+    DetalleCardCompraVentaModule,
+    ModalEditProductsModule,
+    ModalGenericoModule
   ],
   declarations: [VentaExistentePage]
 })

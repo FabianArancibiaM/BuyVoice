@@ -15,6 +15,8 @@ import { DataManagementService } from 'src/app/service/data-management.service';
 export class ModalEditProductsComponent implements OnInit {
 
   public model: ProductoComunModel;
+  public removeView = false;
+  public flowView = false;
 
   constructor(
     private controller: ModalController,
@@ -24,13 +26,42 @@ export class ModalEditProductsComponent implements OnInit {
 
   ngOnInit() {
     this.model = this._management.selectedProduct;
+    if(this._management.selectedTransaction.detalleProductos.length <= 1) {
+      this.removeView = true;
+    }
+    this.flowView =  this._management.flow === 'COMPRA' ? false : true;
   }
 
   onSubmit() {
-    this._service.updateCompra(this._management)
-        .subscribe(data => {
+    if (this._management.flow === 'COMPRA') {
+      this._service.updateCompra(this._management)
+          .subscribe(data => {
+            this.close();
+          }, err => console.log(err));
+    }
+    if (this._management.flow === 'VENTA'){
+      this._service.updateVenta(this._management)
+          .subscribe(data => {
+            this.close();
+          }, err => console.log(err));
+    }
+  }
+
+  removeProduct() {
+    if (this._management.flow === 'COMPRA') {
+      this._service.partialCancellationPurchaseCompra(this._management).subscribe(
+        data => {
           this.close();
-        }, err => console.log(err));
+        },
+        err => console.log(err)
+      );
+    }
+    if (this._management.flow === 'VENTA'){
+      // this._service.updateVenta(this._management)
+      //     .subscribe(data => {
+      //       this.close();
+      //     }, err => console.log(err));
+    }
   }
 
   close(){

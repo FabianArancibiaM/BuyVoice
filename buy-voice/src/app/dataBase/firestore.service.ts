@@ -76,6 +76,12 @@ export class FirestoreService {
             , compra
         ));
     }
+    updateVentas(compra, idNegocio) {
+        return from(updateDoc(
+            doc(this._collectionVenta, idNegocio)
+            , compra
+        ));
+    }
     updateInventario(inventario, idNegocio) {
         return from(updateDoc(
             doc(this._collectionInventario, idNegocio)

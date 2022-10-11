@@ -1,10 +1,14 @@
 <ion-card> Usar para los Items
-  <form (ngSubmit)="onSubmit()" novalidate>
+  <form novalidate>
     <p>Producto: </p>
-    <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}">
+    <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
     <input name="cantidad" required [(ngModel)]="model.cantidad" placeholder="{{model.cantidad}}">
     <input name="precio" required [(ngModel)]="model.precioVentaCompra" placeholder="{{model.precioVentaCompra}}">
-    <button>Actualizar</button>
+    <ion-button (click)="onSubmit()" expand="block" fill="clear" shape="round" >
+      Actualizar
+    </ion-button>
   </form>
-  
+  <ion-button (click)="removeProduct()" expand="block" fill="clear" shape="round" [disabled]="removeView" >
+    Quitar Producto
+  </ion-button>
 </ion-card>

@@ -13,6 +13,7 @@ export class DataManagementService {
   private _selectedProduct: ProductoComunModel;
   private _indexProductSelected: number;
   private _indexTransactionSelected: number;
+  private _flow: 'VENTA' | 'COMPRA' | 'INICIO';
 
   constructor() { }
 
@@ -44,5 +45,10 @@ export class DataManagementService {
     return this._indexTransactionSelected;
   }
 
-
+  set flow(data: 'VENTA' | 'COMPRA' | 'INICIO'){
+    this._flow = data;
+  }
+  get flow(){
+    return this._flow;
+  }
 }

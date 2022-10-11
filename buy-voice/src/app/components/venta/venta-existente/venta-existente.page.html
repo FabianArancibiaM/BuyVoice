@@ -17,9 +17,26 @@
       </ion-item>
     </ion-list>
   </div>
-  <div class="divTable">
+  <!-- <div class="divTable">
     <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable" (eventClick)="eventClick($event)"></app-tabla-generica>
+  </div> -->
+  <ion-spinner *ngIf="showSpinner" name="circular" color="success" class="spinerGeneral"></ion-spinner>
+<!-- <div class="divTable">
+  <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable" (eventClick)="eventClick($event)"></app-tabla-generica>
+</div>
+<div class="divTotal">
+  <h2>Total: ${{montoTotal}}</h2>
+</div> -->
+<div *ngIf="showcardGeneral" class="view-list" >
+  <app-card-compra-venta *ngFor="let data of dataCardGeneral" [data]="data" (eventClick)="viewDetails($event)" ></app-card-compra-venta>
+</div>
+
+<div *ngIf="showDetails" class="content-details" >
+  <div class="view-list" >
+    <app-card-compra-venta *ngFor="let data of dataCardDetails" [data]="data" (eventClickInfoProd)="openModalModify($event)"></app-card-compra-venta>
   </div>
-  <div class="divTotal">
-  </div>
+  <ion-text class="text-tt" color="success">Monto total: ${{montoTotal}}</ion-text>
+  <ion-button class="button-return" expand="block" color="secondary" (click)="returnClick()" >Volver</ion-button>
+  <ion-button class="button-cancel" expand="block" color="danger" (click)="cancelTransferClick()">Anular venta completa</ion-button>
+</div>
   </ion-content>

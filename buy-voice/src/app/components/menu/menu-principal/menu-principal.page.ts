@@ -21,25 +21,23 @@ export class MenuPrincipalPage implements OnInit {
     {
       title: 'Mis Compras', children: [
         { title: 'Nueva Compra', url: '/nueva-compra' },
-        { title: 'Compras Realizadas', url: '/compra-existente' },
-        { title: 'Anular Compra', url: '/anular-compra' }
+        { title: 'Ver compras Realizadas', url: '/compra-existente' },
       ]
     },
     {
-      title: 'Ventas', children: [
+      title: 'Mis Ventas', children: [
         { title: 'Nueva Venta', url: '/nueva-venta' },
-        { title: 'Venta Existente', url: '/venta-existente' },
-        { title: 'Anular Venta', url: '/anular-venta' },
+        { title: 'Ver ventas realizadas', url: '/venta-existente' },
       ]
     },
     {
-      title: 'Inventario', children: [
+      title: 'Mi Inventario', children: [
         { title: 'Ver Stock', url: '/ver-stock' },
         { title: 'Ajustar Inventario', url: '/ajustar-inventario' },
       ]
     },
     {
-      title: 'Reporte', children: [
+      title: 'Mis Reportes', children: [
         { title: '', url: '/reporte' }
       ]
     }

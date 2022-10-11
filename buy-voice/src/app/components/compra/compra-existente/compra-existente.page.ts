@@ -31,14 +31,14 @@ export class CompraExistentePage implements OnInit, OnDestroy {
   public showModal = false;
   public showcardGeneral = true;
   public showSpinner = false;
-  
+
   public default = {
     title: 'Compra',
     detalle: 'Cantidad de productos: 1 <br> hola',
     monto: '$25.000.-',
     allData: new CompraVentaModel()
   };
-  
+
   private _dateSelec;
   private _promesa: Subscription[];
   private _nuevaVnt: Array<CompraVentaModel>;
@@ -54,9 +54,11 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     if(this._promesa && this._promesa.length>0){
       this._promesa.forEach(p=> p.unsubscribe());
     }
+    this._management.flow = 'INICIO';
   }
 
   async ngOnInit() {
+    this._management.flow = 'COMPRA';
     this.showSpinner = true;
     this._promesa = [];
     this._promesa.push(this._comercio.getInventario().subscribe());
@@ -87,7 +89,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
 
   cancelTransferClick() {
     this.showSpinner = true;
-    this._promesa.push(this._comercio.totalCancellationPurchase(this._management).subscribe( data => {
+    this._promesa.push(this._comercio.totalCancellationPurchaseCompra(this._management).subscribe( data => {
       this._promesa.push(this._comercio.getCompras().pipe(take(1)).subscribe( (datos) => {
         datos.message.forEach(dts => {
           if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
@@ -111,7 +113,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
         });
         this.showcardGeneral = true;
         this.showDetails = false;
-        this.showSpinner = false
+        this.showSpinner = false;
       }));
     }));
   }
@@ -139,7 +141,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this.showDetails = true;
     this.showcardGeneral = false;
     this.dataCardDetails = [];
-    debugger
+    this.montoTotal = 0;
     this._management.selectedTransaction = this._nuevaVnt[event];
     this._management.indexTransactionSelected = event;
     this._management.selectedTransaction.detalleProductos.forEach( (data, index) => {
@@ -154,8 +156,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
         flow: 'EDIT',
         index
       };
+      this.montoTotal = this.montoTotal + ( data.precioVentaCompra * data.cantidad);
       this.dataCardDetails.push(object);
     });
+    this.montoTotal = Number(this.montoTotal);
   }
 
   async openModalModify(event: number){
@@ -178,6 +182,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
           && compVent.id === this._management.selectedTransaction.id
         );
         this.dataCardDetails = [];
+        this.montoTotal = 0;
         this._management.selectedTransaction.detalleProductos.forEach( (data, index) => {
           const object: ICompraVenta = {
             title: ``,
@@ -190,8 +195,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
             flow: 'EDIT',
             index
           };
+          this.montoTotal = this.montoTotal + ( data.precioVentaCompra * data.cantidad);
           this.dataCardDetails.push(object);
         });
+        this.montoTotal = Number(this.montoTotal);
         this.showSpinner = false;
       }));
     }));

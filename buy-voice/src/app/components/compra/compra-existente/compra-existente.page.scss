@@ -9,7 +9,10 @@
     text-align: center;
 }
 
-
+.spinerGeneral {
+    position: inherit;
+    z-index: 99999;
+  }
 
 //-----------
 .content-details {
@@ -31,4 +34,13 @@
     width: 95%;
     position: fixed;
     bottom: 10px;
+}
+.text-tt {
+    width: 95%;
+    height: 20px;
+    position: fixed;
+    bottom: 95px;
+    z-index: 99;
+    background-color: white;
+    text-align: center;
 }
