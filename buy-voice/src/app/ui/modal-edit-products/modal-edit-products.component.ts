@@ -57,10 +57,10 @@ export class ModalEditProductsComponent implements OnInit {
       );
     }
     if (this._management.flow === 'VENTA'){
-      // this._service.updateVenta(this._management)
-      //     .subscribe(data => {
-      //       this.close();
-      //     }, err => console.log(err));
+      this._service.partialCancellationPurchaseVenta(this._management)
+          .subscribe(data => {
+            this.close();
+          }, err => console.log(err));
     }
   }
 

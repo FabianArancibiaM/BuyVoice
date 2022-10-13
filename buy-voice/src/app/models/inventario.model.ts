@@ -14,6 +14,7 @@ export class InventarioModel {
     private _nombre: string;
     private _unidadMedida: string;
     private _unidadMedidaVenta: string;
+    private _fechaCompra: string[];
 
     constructor(){}
 
@@ -22,6 +23,12 @@ export class InventarioModel {
     }
     public set id(v: number) {
         this._id = v;
+    }
+    public get fechaCompra() {
+        return this._fechaCompra;
+    }
+    public set fechaCompra(v: string[]) {
+        this._fechaCompra = v;
     }
     public get cantidadDisponible() {
         return this._cantidadDisponible;

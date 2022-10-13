@@ -1,4 +1,4 @@
-<!-- <ion-header>
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
 			<ion-back-button></ion-back-button>
@@ -12,12 +12,12 @@
     <ion-list>
       <ion-item>
         <ion-select interface="popover" placeholder="Seleccione una fecha" (ionChange)="buscarProducto($event)">
-          <ion-select-option *ngFor="let data of listaProductos;let i = index" value="{{data.codigo}}">{{data.nombre}}</ion-select-option>
+          <ion-select-option *ngFor="let data of listaInventario;let i = index" value="{{data.id}}">{{data.nombre}}</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>
   </div>
-  <div class="divResumen" *ngIf="mostrar">
+  <!-- <div class="divResumen" *ngIf="mostrar">
     <h1>Fecha última compra</h1>
     {{fecha}}
     <h2>Cantidad: {{detalleUnidad}} </h2>
@@ -27,5 +27,5 @@
   </div>
   <div class="divTable" *ngIf="mostrar">
     <app-tabla-generica [titleTable]="titleTable" [dataTable]="dataTable"></app-tabla-generica>
-  </div>
-</ion-content> -->
+  </div> -->
+</ion-content>

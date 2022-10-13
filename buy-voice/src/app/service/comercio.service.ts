@@ -69,9 +69,10 @@ export class ComercioService {
             nuevo.precioVentaActual = prod.precio_venta_actual;
             nuevo.unidadMedida = prod.unidad_medida;
             nuevo.unidadMedidaVenta = prod.unidad_medida_venta;
+            nuevo.fechaCompra = prod.fecha_compra;
             this._listaInventario.push(nuevo);
           });
-          observer.next({status: 'OK', message: ''});
+          observer.next({status: 'OK', message: this._listaInventario});
         }, err => {
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error'});
@@ -124,38 +125,77 @@ export class ComercioService {
     const method = (observer) => {
       this._firestore.getAllCompra(this._infoNegocio.id).pipe(take(1)).subscribe(
         data => {
-          const fechaActual = new Date();
-          const mes = (fechaActual.getMonth()+1) < 10 ? `0${fechaActual.getMonth()+1}` : fechaActual.getMonth()+1;
-          const dia = fechaActual.getUTCDate()  < 10 ? `0${fechaActual.getUTCDate()}` : fechaActual.getUTCDate();
-          const anno = fechaActual.getFullYear();
-          const stringFecha = `${dia}-${mes}-${anno}`;
-          const diaIniciado = data[stringFecha];
-          let idVentas = 0;
-          if(!diaIniciado){
-            idVentas = 1;
-          } else {
-            idVentas = diaIniciado.length > 0 ? diaIniciado[diaIniciado.length-1].id_compra + 1 : 1;
-          }
-          const objCompra = {
-            id_compra: idVentas,
-            total_compra: nuevaCompra.totalVentaCompra,
-            id_usuario: nuevaCompra.comerciante.id,
-            fecha: `${dia}/${mes}/${anno}`,
-            estado: 'realizado',
-            detalle_productos: nuevaCompra.detalleProductos.map(prod => ({
-              cantidad: prod.cantidad,
-              id_inventario: prod.inventario.id,
-              precio_compra: prod.precioVentaCompra
-            }))
-          };
-          const obj = !diaIniciado ? {[stringFecha]: [objCompra] } : {[stringFecha]: [...diaIniciado, objCompra] };
-          this._firestore.newPurchase(obj,this._infoNegocio.id).subscribe(
-            () => observer.next({status: 'OK', message: ''})
-            , err => {
-              console.log(err);
-              observer.next({status: 'NOK', message: 'Se produjo un error'});
+          this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe( invProd => {
+
+            const fechaActual = new Date();
+            const mes = (fechaActual.getMonth()+1) < 10 ? `0${fechaActual.getMonth()+1}` : fechaActual.getMonth()+1;
+            const dia = fechaActual.getUTCDate()  < 10 ? `0${fechaActual.getUTCDate()}` : fechaActual.getUTCDate();
+            const anno = fechaActual.getFullYear();
+            const stringFecha = `${dia}-${mes}-${anno}`;
+            const diaIniciado = data[stringFecha];
+            let idVentas = 0;
+            if(!diaIniciado){
+              idVentas = 1;
+            } else {
+              idVentas = diaIniciado.length > 0 ? diaIniciado[diaIniciado.length-1].id_compra + 1 : 1;
             }
-          );
+            const objCompra = {
+              id_compra: idVentas,
+              total_compra: nuevaCompra.totalVentaCompra,
+              id_usuario: nuevaCompra.comerciante.id,
+              fecha: `${dia}/${mes}/${anno}`,
+              estado: 'realizado',
+              detalle_productos: nuevaCompra.detalleProductos.map(prod => ({
+                cantidad: prod.cantidad,
+                id_inventario: prod.inventario.id,
+                precio_compra: prod.precioVentaCompra
+              }))
+            };
+            const obj = !diaIniciado ? {[stringFecha]: [objCompra] } : {[stringFecha]: [...diaIniciado, objCompra] };
+
+            nuevaCompra.detalleProductos.forEach( p => {
+              const invProdSelect = invProd.productos.find( x => x.nombre === p.inventario.nombre);
+              if(invProdSelect){
+                invProdSelect.cantidad_disponible = Number(invProdSelect.cantidad_disponible) + Number(p.cantidad);
+                if(invProdSelect.fecha_compra.length === 10){
+                  invProdSelect.fecha_compra = [ objCompra.fecha,
+                    invProdSelect.fecha_compra[0], invProdSelect.fecha_compra[1], invProdSelect.fecha_compra[2],
+                    invProdSelect.fecha_compra[3], invProdSelect.fecha_compra[4], invProdSelect.fecha_compra[5],
+                    invProdSelect.fecha_compra[6], invProdSelect.fecha_compra[7], invProdSelect.fecha_compra[8]];
+                } else {
+                  invProdSelect.fecha_compra = [objCompra.fecha, ...invProdSelect.fecha_compra];
+                }
+              } else {
+                const newInvent = {
+                  cantidad_disponible: p.cantidad,
+                  cantidad_perdida: 0,
+                  fecha_compra: [objCompra.fecha],
+                  id: invProd.productos.length + 1,
+                  nombre: p.inventario.nombre,
+                  precio_venta_actual: 0,
+                  unidad_medida: p.inventario.unidadMedida,
+                  unidad_medida_venta: ''
+                };
+                invProd.productos = [newInvent, ...invProd.productos];
+              }
+            });
+
+            this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
+              result => {
+                this._firestore.newPurchase(obj,this._infoNegocio.id).subscribe(
+                  () => observer.next({status: 'OK', message: ''})
+                  , err => {
+                    console.log(err);
+                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                  }
+                );
+              },
+              err => {
+                console.log(err);
+                observer.next({status: 'NOK', message: 'Se produjo un error'});
+              }
+            );
+          });
         }, err =>{
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error'});
@@ -233,6 +273,7 @@ export class ComercioService {
             newData.detalle_productos.forEach( detProd => {
               const search = invProd.productos.find( x => x.id === detProd.id_inventario);
               search.cantidad_disponible = search.cantidad_disponible - detProd.cantidad;
+              search.fecha_compra = search.fecha_compra.filter(x=> x !== management.selectedTransaction.fecha);
             });
             this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
               result => {
@@ -265,11 +306,15 @@ export class ComercioService {
           const newData = data[fecha].find(trx => trx.id_compra === management.selectedTransaction.id);
 
           this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe( invProd => {
+
             const searchProd = newData.detalle_productos.find( x => x.id_inventario === management.selectedProduct.inventario.id);
             newData.detalle_productos = newData.detalle_productos.filter(x => x.id_inventario !== management.selectedProduct.inventario.id);
             newData.total_compra = newData.total_compra - (searchProd.cantidad * searchProd.precio_compra);
+
             const invProdSelect = invProd.productos.find( x => x.id === management.selectedProduct.inventario.id);
+            invProdSelect.fecha_compra = invProdSelect.fecha_compra.filter(x => x !== management.selectedTransaction.fecha);
             invProdSelect.cantidad_disponible = (Number(invProdSelect.cantidad_disponible) -  searchProd.cantidad).toString();
+            invProdSelect.fecha_compra = invProdSelect.fecha_compra.filter(x=> x !== management.selectedTransaction.fecha);
 
             this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
               result => {
@@ -429,6 +474,7 @@ export class ComercioService {
     };
     return new Observable(method);
   }
+
   totalCancellationPurchaseVenta(management: DataManagementService){
     const method = (observer) => {
       this._firestore.getAllVenta(this._infoNegocio.id).pipe(take(1)).subscribe(
@@ -441,6 +487,49 @@ export class ComercioService {
             console.log(err);
             observer.next({status: 'NOK', message: 'Se produjo un error'});
           });
+        }, err =>{
+          console.log(err);
+          observer.next({status: 'NOK', message: 'Se produjo un error'});
+        }
+      );
+    };
+    return new Observable(method);
+  }
+
+  partialCancellationPurchaseVenta(management: DataManagementService){
+    const method = (observer) => {
+      this._firestore.getAllVenta(this._infoNegocio.id).pipe(take(1)).subscribe(
+        data => {
+          const fecha = management.selectedTransaction.fecha.replace('/','-').replace('/','-');
+          const newData = data[fecha].find(trx => trx.id_venta === management.selectedTransaction.id);
+
+          this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe( invProd => {
+
+            const searchProd = newData.detalle_productos.find( x => x.id_inventario === management.selectedProduct.inventario.id);
+            newData.detalle_productos = newData.detalle_productos.filter(x => x.id_inventario !== management.selectedProduct.inventario.id);
+            newData.total_compra = newData.total_compra - (searchProd.cantidad * searchProd.precio_compra);
+
+            const invProdSelect = invProd.productos.find( x => x.id === management.selectedProduct.inventario.id);
+            invProdSelect.cantidad_disponible = (Number(invProdSelect.cantidad_disponible) +  searchProd.cantidad).toString();
+
+            this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
+              result => {
+                this._firestore.updateVentas(data,this._infoNegocio.id ).subscribe( dta => {
+                    observer.next({status: 'OK', message: ''});
+                  },
+                  err => {
+                    console.log(err);
+                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                  }
+                );
+              },
+              err => {
+                console.log(err);
+                observer.next({status: 'NOK', message: 'Se produjo un error'});
+              }
+            );
+          });
+
         }, err =>{
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error'});
