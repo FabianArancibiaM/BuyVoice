@@ -24,6 +24,7 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
   ];
   public dataTable: any[] = [];
   public showSpinner = false;
+  public textError = '';
   private _promesa: Subscription[];
   private _listaProdCmpra = new Array<ProductoComunModel>();
 
@@ -51,13 +52,20 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
   }
 
   registrar(){
-    this.showSpinner = true;
-    const comp = new CompraVentaModel();
-    comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
-    comp.totalVentaCompra = this.montoTotal;
-    comp.detalleProductos = this._listaProdCmpra;
-    const sus = this._comercio.generarVenta(comp).subscribe(data2 => this.showSpinner = false);
-    this._promesa.push(sus);
+    try {
+      this.showSpinner = true;
+      const comp = new CompraVentaModel();
+      comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
+      comp.totalVentaCompra = this.montoTotal;
+      comp.detalleProductos = this._listaProdCmpra;
+      const sus = this._comercio.generarVenta(comp).subscribe(data2 => {
+        this.showSpinner = false;
+        this.textError = JSON.stringify(data2);
+      });
+      this._promesa.push(sus);
+    } catch (error) {
+      this.textError = error;
+    }
   }
 
 }

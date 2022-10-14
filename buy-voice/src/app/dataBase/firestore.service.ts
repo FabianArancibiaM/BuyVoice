@@ -64,6 +64,7 @@ export class FirestoreService {
     }
 
     newSale(ventaInicial, idNegocio){
+        debugger
         return from(updateDoc(
             doc(this._collectionVenta, idNegocio)
             , ventaInicial

@@ -23,6 +23,11 @@ export class ComercioService {
     private _infoNegocio: NegocioModel
   ){}
 
+  toDateFormat(fecha: string) {
+    const f = fecha.split('-');
+    return new Date(`${f[1]}/${f[0]}/${f[2]}`);
+  }
+
   getInfoNegocio(nombreUsuario: string, clave: string) {
     const method = (observer) =>{
       this._firestore.getAllNegocio().subscribe(
@@ -49,7 +54,7 @@ export class ComercioService {
         }
       , err => {
         console.log(err);
-        observer.next({status: 'NOK', message: 'Se produjo un error'});
+        observer.next({status: 'NOK', message: 'Se produjo un error', err});
       });
     };
     return new Observable<any>(method);
@@ -75,7 +80,7 @@ export class ComercioService {
           observer.next({status: 'OK', message: this._listaInventario});
         }, err => {
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         },
         ()=> console.log('comple')
       );
@@ -90,7 +95,8 @@ export class ComercioService {
       const listaCompras = new Array<CompraVentaModel>();
       this._firestore.getAllCompra(this._infoNegocio.id).subscribe(
         data => {
-          const llaves = Object.keys(data).filter(k => k !== 'id');
+          let llaves = Object.keys(data).filter(k => k !== 'id');
+          llaves = llaves.sort((a,b) => this.toDateFormat(b).getTime() - this.toDateFormat(a).getTime() );
           llaves.forEach(k => {
             data[k].forEach( vnt => {
               const nuevaVnt = new CompraVentaModel();
@@ -114,7 +120,7 @@ export class ComercioService {
           observer.next({status: 'OK', message: listaCompras});
         }, err => {
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -186,19 +192,19 @@ export class ComercioService {
                   () => observer.next({status: 'OK', message: ''})
                   , err => {
                     console.log(err);
-                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                    observer.next({status: 'NOK', message: 'Se produjo un error', err});
                   }
                 );
               },
               err => {
                 console.log(err);
-                observer.next({status: 'NOK', message: 'Se produjo un error'});
+                observer.next({status: 'NOK', message: 'Se produjo un error', err});
               }
             );
           });
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -243,7 +249,7 @@ export class ComercioService {
                 this._firestore.updateInventario(dataInv, this._infoNegocio.id).subscribe(
                   result => observer.next({status: 'OK', message: ''}), err => {
                     console.log(err);
-                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                    observer.next({status: 'NOK', message: 'Se produjo un error', err});
                   }
                 );
               } else {
@@ -252,11 +258,11 @@ export class ComercioService {
             });
           }, err => {
             console.log(err);
-            observer.next({status: 'NOK', message: 'Se produjo un error'});
+            observer.next({status: 'NOK', message: 'Se produjo un error', err});
           });
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -282,16 +288,16 @@ export class ComercioService {
                   observer.next({status: 'OK', message: ''});
                 }, err => {
                   console.log(err);
-                  observer.next({status: 'NOK', message: 'Se produjo un error'});
+                  observer.next({status: 'NOK', message: 'Se produjo un error', err});
                 });
               }, err => {
                 console.log(err);
-                observer.next({status: 'NOK', message: 'Se produjo un error'});
+                observer.next({status: 'NOK', message: 'Se produjo un error', err});
               });
           });
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -323,20 +329,20 @@ export class ComercioService {
                   },
                   err => {
                     console.log(err);
-                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                    observer.next({status: 'NOK', message: 'Se produjo un error', err});
                   }
                 );
               },
               err => {
                 console.log(err);
-                observer.next({status: 'NOK', message: 'Se produjo un error'});
+                observer.next({status: 'NOK', message: 'Se produjo un error', err});
               }
             );
           });
 
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -346,11 +352,13 @@ export class ComercioService {
   // VENTAS
 
   getVentas(){
+    
     const method = (observer) => {
       const listaVentas = new Array<CompraVentaModel>();
       this._firestore.getAllVenta(this._infoNegocio.id).subscribe(
         data => {
-          const llaves = Object.keys(data).filter(k => k !== 'id');
+          let llaves = Object.keys(data).filter(k => k !== 'id');
+          llaves = llaves.sort((a,b) => this.toDateFormat(b).getTime() - this.toDateFormat(a).getTime() );
           llaves.forEach(k => {
             data[k].forEach( vnt => {
               if(vnt.estado !== 'ANULADO'){
@@ -378,7 +386,7 @@ export class ComercioService {
           observer.next({status: 'OK', message: listaVentas});
         }, err => {
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -411,20 +419,26 @@ export class ComercioService {
               cantidad: prod.cantidad,
               id_inventario: prod.inventario.id,
               precio_venta: prod.precioVentaCompra,
-              unidad_medida_venta: prod.unidadMedidaVenta
+              unidad_medida_venta: prod.unidadMedidaVenta ? prod.unidadMedidaVenta : ''
             }))
           };
-          const obj = !diaIniciado ? {[stringFecha]: [objCompra] } : {[stringFecha]: [...diaIniciado, objCompra] };
+          let obj;
+          if(!diaIniciado){
+            obj = {...data, [stringFecha]: [objCompra] };
+          } else {
+            data[stringFecha] = [...diaIniciado, objCompra];
+            obj = data;
+          }
           this._firestore.newSale(obj,this._infoNegocio.id).subscribe(
             () => observer.next({status: 'OK', message: ''})
             , err => {
               console.log(err);
-              observer.next({status: 'NOK', message: 'Se produjo un error'});
+              observer.next({status: 'NOK', message: 'Se produjo un error', err});
             }
           );
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -464,11 +478,11 @@ export class ComercioService {
             observer.next({status: 'OK', message: ''});
           }, err => {
             console.log(err);
-            observer.next({status: 'NOK', message: 'Se produjo un error'});
+            observer.next({status: 'NOK', message: 'Se produjo un error', err});
           });
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -485,11 +499,11 @@ export class ComercioService {
             observer.next({status: 'OK', message: ''});
           }, err => {
             console.log(err);
-            observer.next({status: 'NOK', message: 'Se produjo un error'});
+            observer.next({status: 'NOK', message: 'Se produjo un error', err});
           });
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };
@@ -519,20 +533,20 @@ export class ComercioService {
                   },
                   err => {
                     console.log(err);
-                    observer.next({status: 'NOK', message: 'Se produjo un error'});
+                    observer.next({status: 'NOK', message: 'Se produjo un error', err});
                   }
                 );
               },
               err => {
                 console.log(err);
-                observer.next({status: 'NOK', message: 'Se produjo un error'});
+                observer.next({status: 'NOK', message: 'Se produjo un error', err});
               }
             );
           });
 
         }, err =>{
           console.log(err);
-          observer.next({status: 'NOK', message: 'Se produjo un error'});
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
         }
       );
     };

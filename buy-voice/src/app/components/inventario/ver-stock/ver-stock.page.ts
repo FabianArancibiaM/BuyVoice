@@ -26,8 +26,8 @@ export class VerStockPage implements OnInit, OnDestroy {
   public dataTable: any[] = [];
 
 
-  // public listaInventario: Array<InventarioModel> = [];
-  public listaInventario = [];
+  public listaInventario: Array<InventarioModel> = [];
+  public selectedProd: InventarioModel = undefined;
   private promesa: Subscription[] = [];
 
   constructor(
@@ -42,16 +42,15 @@ export class VerStockPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.promesa.push(this.comercio.getInventario().subscribe( data => {
-    //   this.listaInventario = data.message;
-    //   console.log(JSON.stringify(this.listaInventario))
-    // } ));
-    this.listaInventario = [{ "cantidadDisponible": "5254851", "cantidadPerdida": 5, "id": "1", "nombre": "manzana-borrar", "precioVentaActual": 500, "unidadMedida": "kilos", "unidadMedidaVenta": "medio" }, { "cantidadDisponible": "1499917783", "cantidadPerdida": 15, "id": "2", "nombre": "Palta", "precioVentaActual": 2500, "unidadMedida": "kilos", "unidadMedidaVenta": "medio" }]
+    this.promesa.push(this.comercio.getInventario().subscribe( data => {
+      this.listaInventario = data.message;
+      console.log(JSON.stringify(this.listaInventario))
+    } ));
   }
 
   buscarProducto(evento){
-    const select = this.listaInventario.find(x => x.id === evento.detail.value)
-    console.log(select)
+    this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value)
+    console.log(this.selectedProd)
   }
 
 }
