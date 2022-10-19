@@ -90,7 +90,7 @@ export class ComercioService {
 
   // COMPRAS
 
-  getCompras(){
+  getCompras(): Observable<{status: string; message: Array<CompraVentaModel>}>{
     const method = (observer) => {
       const listaCompras = new Array<CompraVentaModel>();
       this._firestore.getAllCompra(this._infoNegocio.id).subscribe(
@@ -127,7 +127,7 @@ export class ComercioService {
     return new Observable<any>(method);
   }
 
-  generarCompra(nuevaCompra: CompraVentaModel) {
+  generarCompra(nuevaCompra: CompraVentaModel){
     const method = (observer) => {
       this._firestore.getAllCompra(this._infoNegocio.id).pipe(take(1)).subscribe(
         data => {

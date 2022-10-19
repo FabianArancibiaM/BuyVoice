@@ -1,12 +1,50 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-			<ion-back-button></ion-back-button>
-		</ion-buttons>
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
     <ion-title>ajustar-inventario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <app-modal-generico></app-modal-generico>
+  <!-- <app-modal-generico></app-modal-generico> -->
+  <div class="divBuscador">
+    <ion-list>
+      <ion-item>
+        <ion-select interface="popover" placeholder="Seleccion un producto" (ionChange)="buscarProducto($event)">
+          <ion-select-option *ngFor="let data of listaInventario;let i = index" value="{{data.id}}">{{data.nombre}}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-card class="divCampEdit" *ngIf="selectedProd">
+    <ion-card-header>
+      <ion-card-title>{{selectedProd.nombre}}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <div class="fieldToEdit">
+            <ion-label class="ion-text-wrap">Precio de venta: ${{selectedProd.precioVentaActual}} {{selectedProd.unidadMedidaVenta}}</ion-label>
+            <ion-button (click)="selectedProperty('PRECIO')"> Actualizar </ion-button>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="fieldToEdit">
+            <ion-label class="ion-text-wrap">Cantidad disponible: {{selectedProd.cantidadDisponible}} {{selectedProd.unidadMedida}}</ion-label>
+            <ion-button (click)="selectedProperty('CANTIDAD')"> Actualizar </ion-button>
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="fieldToEdit">
+            <ion-label class="ion-text-wrap">Merma: {{selectedProd.cantidadPerdida}} {{selectedProd.unidadMedida}}</ion-label>
+            <ion-button (click)="selectedProperty('MERMA')"> Actualizar </ion-button>
+          </div>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

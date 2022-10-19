@@ -31,22 +31,18 @@ export class FirestoreService {
     }
 
     getAllCompra(idNegocio: string) {
-        console.log('getAllCompra');
         const pokemonDocumentReference = doc(this._collectionCompra, idNegocio);
         return docData(pokemonDocumentReference, { idField: 'id' });
     }
 
     getAllInventario(idNegocio: string) {
-        console.log('getAllInventario');
         const pokemonDocumentReference = doc(this._collectionInventario, idNegocio);
         return docData(pokemonDocumentReference, { idField: 'id' });
     }
     getAllNegocio() {
-        console.log('getAllNegocio');
         return collectionData(this._collectionNegocio, { idField: 'id' }) as Observable<any[]>;
     }
     getAllVenta(idNegocio: string) {
-        console.log('getAllVenta');
         const pokemonDocumentReference = doc(this._collectionVenta, idNegocio);
         return docData(pokemonDocumentReference, { idField: 'id' });
     }
@@ -64,7 +60,6 @@ export class FirestoreService {
     }
 
     newSale(ventaInicial, idNegocio){
-        debugger
         return from(updateDoc(
             doc(this._collectionVenta, idNegocio)
             , ventaInicial

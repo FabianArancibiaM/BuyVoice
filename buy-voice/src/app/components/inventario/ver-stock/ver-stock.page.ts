@@ -1,15 +1,9 @@
 import { Subscription } from 'rxjs';
-/* eslint-disable no-underscore-dangle */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComercioService } from 'src/app/service/comercio.service';
-import { DataManagementService } from 'src/app/service/data-management.service';
-import { Utils } from 'src/app/shared/utils';
 import { InventarioModel } from 'src/app/models/inventario.model';
-
-interface ISelectorProducto {
-  codigo: string;
-  nombre: string;
-}
+import { ICompra } from 'src/app/interfaces/ICompra.interface.interface';
+import { ISelectorProducto } from 'src/app/interfaces/ISelectorProducto.interface';
 
 @Component({
   selector: 'app-ver-stock',
@@ -27,12 +21,12 @@ export class VerStockPage implements OnInit, OnDestroy {
 
 
   public listaInventario: Array<InventarioModel> = [];
+  public boletaCompra: Array<ICompra> = [];
   public selectedProd: InventarioModel = undefined;
   private promesa: Subscription[] = [];
 
   constructor(
-    private comercio: ComercioService,
-    private management: DataManagementService
+    private comercio: ComercioService
   ) { }
 
   ngOnDestroy(): void {
@@ -44,13 +38,24 @@ export class VerStockPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.promesa.push(this.comercio.getInventario().subscribe( data => {
       this.listaInventario = data.message;
-      console.log(JSON.stringify(this.listaInventario))
     } ));
   }
 
   buscarProducto(evento){
-    this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value)
-    console.log(this.selectedProd)
+    this.promesa.push(this.comercio.getCompras().subscribe( data => {
+      this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value);
+      this.boletaCompra = [];
+      data.message.forEach(p => {
+        const pro = p.detalleProductos.find(x => x.inventario.id.toString() === this.selectedProd.id.toString());
+        if( pro !== undefined ){
+          this.boletaCompra.push({
+            cantidad: `${pro.cantidad} ${pro.inventario.unidadMedida}`,
+            fecha: p.fecha,
+            total: `${pro.cantidad*pro.precioVentaCompra}`
+          });
+        }
+      });
+    }, err => console.log(err) ));
   }
 
 }

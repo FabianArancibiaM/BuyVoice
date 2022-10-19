@@ -60,7 +60,6 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
     comp.totalVentaCompra = this.montoTotal;
     comp.detalleProductos = this._listaProdCmpra;
     const sus = this._comercio.generarCompra(comp).subscribe(data2 => {
-      console.log('aqui',data2);
       this.showSpinner = false;
     });
     this._promesa.push(sus);

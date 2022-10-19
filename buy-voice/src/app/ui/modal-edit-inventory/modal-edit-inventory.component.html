@@ -1,0 +1,28 @@
+<form novalidate>
+  <p>Producto: </p>
+  <!-- <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
+  <input name="cantidad" required [(ngModel)]="model.cantidad" placeholder="{{model.cantidad}}">
+  <input name="precio" required [(ngModel)]="model.precioVentaCompra" placeholder="{{model.precioVentaCompra}}"> -->
+  <ion-item *ngIf="flow === 'PRECIO'">
+    <ion-label>
+      <h1>PRECIO</h1>
+      <p>Paragraph</p>
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="flow === 'CANTIDAD'">
+    <ion-label>
+      <h1>CANTIDAD</h1>
+      <p>Paragraph</p>
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="flow === 'MERMA'">
+    <ion-label>
+      <h1>MERMA</h1>
+      <p>Paragraph</p>
+    </ion-label>
+  </ion-item>
+
+  <ion-button expand="block" fill="clear" shape="round" >
+    Actualizar
+  </ion-button>
+</form>
