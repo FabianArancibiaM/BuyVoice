@@ -60,9 +60,11 @@ export class ComercioService {
     return new Observable<any>(method);
   }
 
+  // Inventario
+
   getInventario(){
     const method = (observer) =>{
-      this._firestore.getAllInventario(this._infoNegocio.id).subscribe(
+      this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe(
         data => {
           this._listaInventario = [];
           data.productos.forEach((prod, indx) => {
@@ -78,6 +80,30 @@ export class ComercioService {
             this._listaInventario.push(nuevo);
           });
           observer.next({status: 'OK', message: this._listaInventario});
+        }, err => {
+          console.log(err);
+          observer.next({status: 'NOK', message: 'Se produjo un error', err});
+        },
+        ()=> console.log('comple')
+      );
+    };
+    return new Observable<any>(method);
+  }
+
+  updateInventario(inventario: InventarioModel){
+    const method = (observer) =>{
+      this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe(
+        data => {
+          const search = data.productos.find(i => i.id.toString() === inventario.id.toString());
+          search.cantidad_disponible = inventario.cantidadDisponible;
+          search.cantidad_perdida = inventario.cantidadPerdida;
+          search.precio_venta_actual = inventario.precioVentaActual;
+          search.unidad_medida_venta = inventario.unidadMedidaVenta;
+          search.unidad_medida = inventario.unidadMedida;
+          this._firestore.updateInventario(data, this._infoNegocio.id).subscribe(
+            data => observer.next({status: 'OK', message: ''}),
+            err => observer.next({status: 'NOK', message: 'Se produjo un error', err})
+          );
         }, err => {
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error', err});
@@ -352,7 +378,7 @@ export class ComercioService {
   // VENTAS
 
   getVentas(){
-    
+
     const method = (observer) => {
       const listaVentas = new Array<CompraVentaModel>();
       this._firestore.getAllVenta(this._infoNegocio.id).subscribe(

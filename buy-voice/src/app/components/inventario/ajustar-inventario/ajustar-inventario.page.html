@@ -3,12 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
-    <ion-title>ajustar-inventario</ion-title>
+    <ion-title>Ajustar el inventario</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- <app-modal-generico></app-modal-generico> -->
   <div class="divBuscador">
     <ion-list>
       <ion-item>
@@ -28,23 +27,51 @@
       <ion-list>
         <ion-item>
           <div class="fieldToEdit">
-            <ion-label class="ion-text-wrap">Precio de venta: ${{selectedProd.precioVentaActual}} {{selectedProd.unidadMedidaVenta}}</ion-label>
-            <ion-button (click)="selectedProperty('PRECIO')"> Actualizar </ion-button>
+            <ion-label class="ion-text-wrap">Precio de venta</ion-label>
+            <input name="nombre" required [(ngModel)]="selectedProd.precioVentaActual"
+              placeholder="{{selectedProd.precioVentaActual}}">
           </div>
         </ion-item>
         <ion-item>
           <div class="fieldToEdit">
-            <ion-label class="ion-text-wrap">Cantidad disponible: {{selectedProd.cantidadDisponible}} {{selectedProd.unidadMedida}}</ion-label>
-            <ion-button (click)="selectedProperty('CANTIDAD')"> Actualizar </ion-button>
+            <ion-label class="ion-text-wrap">Unidad de medida de venta</ion-label>
+            <ion-list style="padding: 0px;">
+              <ion-item>
+                <ion-select interface="popover" [placeholder]="medidaDefault" (ionChange)="medidaSelected($event)">
+                  <ion-select-option *ngFor="let data of listaMedidas" [value]="data">{{data}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
           </div>
         </ion-item>
         <ion-item>
           <div class="fieldToEdit">
-            <ion-label class="ion-text-wrap">Merma: {{selectedProd.cantidadPerdida}} {{selectedProd.unidadMedida}}</ion-label>
-            <ion-button (click)="selectedProperty('MERMA')"> Actualizar </ion-button>
+            <ion-label class="ion-text-wrap">Categoria de medida</ion-label>
+            <ion-list style="padding: 0px;">
+              <ion-item>
+                <ion-select interface="popover" [placeholder]="selectedProd.unidadMedida" (ionChange)="categoriaSelected($event)">
+                  <ion-select-option *ngFor="let data of listadoCategoria" [value]="data">{{data}}</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
           </div>
         </ion-item>
-      </ion-list>
+        <ion-item>
+          <div class="fieldToEdit">
+            <ion-label class="ion-text-wrap">Cantidad disponible ({{selectedProd.unidadMedida}})</ion-label>
+            <input name="nombre" required [(ngModel)]="selectedProd.cantidadDisponible"
+              placeholder="{{selectedProd.cantidadDisponible}}">
+          </div>
+        </ion-item>
+        <ion-item>
+          <div class="fieldToEdit">
+            <ion-label class="ion-text-wrap">Merma ({{selectedProd.unidadMedida}})</ion-label>
+            <input name="nombre" required [(ngModel)]="selectedProd.cantidadPerdida"
+              placeholder="{{selectedProd.cantidadPerdida}}">
+            </div>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="selectedProperty()"> Actualizar </ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>

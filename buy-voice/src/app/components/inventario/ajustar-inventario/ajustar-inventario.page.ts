@@ -7,7 +7,7 @@ import { InventarioModel } from 'src/app/models/inventario.model';
 import { ComercioService } from 'src/app/service/comercio.service';
 import { DataManagementService } from 'src/app/service/data-management.service';
 import { FlowType } from 'src/app/types/FlowType.types';
-import { UnitType } from 'src/app/types/UnitType.types';
+import { listaCategoria, listMedida, UnitType } from 'src/app/types/UnitType.types';
 import { ModalEditInventoryComponent } from 'src/app/ui/modal-edit-inventory/modal-edit-inventory.component';
 
 interface IInventary {
@@ -26,19 +26,22 @@ interface IInventary {
 export class AjustarInventarioPage implements OnInit, OnDestroy {
 
   public listaInventario: Array<InventarioModel> = [];
+  public listaMedidas = [];
+  public listadoCategoria = [];
   public selectedProd: InventarioModel = undefined;
   public details: IInventary = undefined;
+  public medidaDefault = '';
   private promesa: Subscription[] = [];
 
   constructor(
-    private comercio: ComercioService,
-    private _modalControl: ModalController,
-    private _management: DataManagementService
+    private comercio: ComercioService
   ) { }
 
   ngOnInit() {
     this.promesa.push(this.comercio.getInventario().subscribe(data => {
       this.listaInventario = data.message;
+      this.listaMedidas = listMedida;
+      this.listadoCategoria = listaCategoria;
     }));
   }
 
@@ -50,17 +53,19 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
 
   buscarProducto(evento) {
     this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value);
+    this.medidaDefault = this.selectedProd.unidadMedidaVenta;
   }
 
-  async selectedProperty(event: FlowType){
-    this._management.flow = event;
-    this._management.selectedInventory = this.selectedProd;
-    const modal = await this._modalControl.create({
-      component: ModalEditInventoryComponent,
-      cssClass: 'my-custom-class',
-    });
-    this.promesa.push(from(modal.onDidDismiss()).subscribe());
-    await modal.present();
+  categoriaSelected(evento){
+    this.selectedProd.unidadMedida = evento.detail.value;
+  }
+
+  medidaSelected(evento){
+    this.selectedProd.unidadMedidaVenta = evento.detail.value;
+  }
+
+  async selectedProperty(){
+    this.promesa.push(this.comercio.updateInventario(this.selectedProd).subscribe(data => { console.log(data);}));
   }
 
 }
