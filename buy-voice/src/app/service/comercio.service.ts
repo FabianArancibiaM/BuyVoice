@@ -101,7 +101,7 @@ export class ComercioService {
           search.unidad_medida_venta = inventario.unidadMedidaVenta;
           search.unidad_medida = inventario.unidadMedida;
           this._firestore.updateInventario(data, this._infoNegocio.id).subscribe(
-            data => observer.next({status: 'OK', message: ''}),
+            () => observer.next({status: 'OK', message: ''}),
             err => observer.next({status: 'NOK', message: 'Se produjo un error', err})
           );
         }, err => {
@@ -126,6 +126,7 @@ export class ComercioService {
           llaves.forEach(k => {
             data[k].forEach( vnt => {
               const nuevaVnt = new CompraVentaModel();
+              nuevaVnt.operation = 'COMPRA';
               nuevaVnt.comerciante = this._infoNegocio.usuarios.find(usu => usu.id === vnt.id_usuario);
               nuevaVnt.fecha = vnt.fecha;
               nuevaVnt.id = vnt.id_compra;
@@ -380,6 +381,7 @@ export class ComercioService {
   getVentas(){
 
     const method = (observer) => {
+      console.log('getVentas')
       const listaVentas = new Array<CompraVentaModel>();
       this._firestore.getAllVenta(this._infoNegocio.id).subscribe(
         data => {
@@ -389,6 +391,7 @@ export class ComercioService {
             data[k].forEach( vnt => {
               if(vnt.estado !== 'ANULADO'){
                 const nuevaVnt = new CompraVentaModel();
+                nuevaVnt.operation = 'VENTA';
                 nuevaVnt.comerciante = this._infoNegocio.usuarios.find(usu => usu.id === vnt.id_usuario);
                 nuevaVnt.fecha = vnt.fecha;
                 nuevaVnt.id = vnt.id_venta;
@@ -409,7 +412,7 @@ export class ComercioService {
               }
             });
           });
-          observer.next({status: 'OK', message: listaVentas});
+          observer.next({status: 'OK getVentas', message: listaVentas});
         }, err => {
           console.log(err);
           observer.next({status: 'NOK', message: 'Se produjo un error', err});

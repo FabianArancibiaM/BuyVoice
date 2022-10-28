@@ -3,21 +3,16 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
-
-import { ReportePageRoutingModule } from './reporte-routing.module';
-
-import { ReportePage } from './reporte.page';
-import { GraphicChartModule } from 'src/app/graphic/graphic.module';
+import { GraphicChartComponent } from './graphic.component';
 
 @NgModule({
+  exports: [GraphicChartComponent],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ReportePageRoutingModule,
-    GraphicChartModule
   ],
   schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
-  declarations: [ReportePage]
+  declarations: [GraphicChartComponent]
 })
-export class ReportePageModule {}
+export class GraphicChartModule {}

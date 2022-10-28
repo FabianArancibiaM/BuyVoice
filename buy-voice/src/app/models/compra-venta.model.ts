@@ -5,6 +5,7 @@ import { NegocioModel } from './negocio.model';
 import { Injectable } from '@angular/core';
 import { UsuarioModel } from './usuario.model';
 import { ProductoComunModel } from './producto-comun.model';
+import { OperationType } from '../types/UnitType.types';
 
 @Injectable({
     providedIn: 'root',
@@ -13,6 +14,7 @@ export class CompraVentaModel {
     private _id: number;
     private _negocio: NegocioModel;
     private _fecha: string;
+    private _operation: OperationType;
     private _totalVentaCompra: number;
     private _usuario: UsuarioModel;
     private _estado: string;
@@ -37,6 +39,12 @@ export class CompraVentaModel {
     }
     public set fecha(v: string) {
         this._fecha = v;
+    }
+    public get operation() {
+        return this._operation;
+    }
+    public set operation(v: OperationType) {
+        this._operation = v;
     }
     public get estado() {
         return this._estado;
