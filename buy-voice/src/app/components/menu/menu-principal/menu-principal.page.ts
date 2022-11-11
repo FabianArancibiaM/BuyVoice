@@ -9,6 +9,7 @@ import { combineLatest, forkJoin } from 'rxjs';
 import { ComercioService } from 'src/app/service/comercio.service';
 import { NegocioModel } from 'src/app/models/negocio.model';
 import { IInfoCardMenu } from 'src/app/interfaces/IMenu.interface';
+import { Speech } from 'src/app/service/speech.service';
 
 @Component({
   selector: 'app-menu-principal',
@@ -44,12 +45,18 @@ export class MenuPrincipalPage implements OnInit {
   ];
 
   constructor(
-    private navCtrl: NavController, private infoMenu: InfoMenu, private _comercio: ComercioService, private _infoNegocio: NegocioModel
+    private navCtrl: NavController,
+    private infoMenu: InfoMenu,
+    private _comercio: ComercioService,
+    private _infoNegocio: NegocioModel,
+    private _speech: Speech
   ) { }
 
   ngOnInit() {
     this._comercio.getInfoNegocio('fabian', 'Admin').subscribe(data =>
-      this._comercio.getInventario().subscribe(dta => console.log('getInventario')));
+      this._comercio.getInventario().subscribe(dta => console.log('getInventario'))
+    );
+    this._speech.getPermission();
   }
 
   redirectTo(card: IInfoCardMenu) {
