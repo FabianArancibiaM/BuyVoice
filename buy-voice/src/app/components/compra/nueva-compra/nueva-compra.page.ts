@@ -34,11 +34,11 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   private _listaProdCmpra = new Array<ProductoComunModel>();
 
   constructor(private _comercio: ComercioService, private _infoNegocio: NegocioModel, private _speech: Speech,
-    private _cd: ChangeDetectorRef,private _recognitionToText: RecognitionToText) { }
+    private _cd: ChangeDetectorRef, private _recognitionToText: RecognitionToText) { }
 
   ngOnDestroy(): void {
-    if(this._promesa && this._promesa.length>0){
-      this._promesa.forEach(p=> p.unsubscribe());
+    if (this._promesa && this._promesa.length > 0) {
+      this._promesa.forEach(p => p.unsubscribe());
     }
     this._speech.stopServiceSpeech();
   }
@@ -50,26 +50,30 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
     this.dataTable = [];
   }
 
-  startListening(){
-    // const frase = ['2','kg','manzana'];
-    // const listObject = this._recognitionToText.recognition(frase);
-    //   listObject.forEach(obj => {
-    //     this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, 0]);
-    //   });
-    this._speech.initServiceSpeech().subscribe( matches => {
+  startListening() {
+    //   const frase = ['1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
+    //   '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
+    // ];
+    //   const listObject = this._recognitionToText.recognition(frase, 'COMPRA');
+    //     listObject.forEach(obj => {
+    //       this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, obj.precio]);
+    //       this.montoTotal = this.montoTotal + (obj.cantidad*parseInt(obj.precio)); 
+    //     });
+    this._speech.initServiceSpeech().subscribe(matches => {
       this.textRecognition = matches;
       console.log('matches', matches)
-      const listObject = this._recognitionToText.recognition(matches);
+      const listObject = this._recognitionToText.recognition(matches,'COMPRA');
       console.log('listObject', JSON.stringify(listObject));
       listObject.forEach(obj => {
         this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, 0]);
+        this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
       });
       this._cd.detectChanges();
     });
   }
 
-  nuevaCompra(){
-    const sus = this._comercio.getCompras().pipe(take(1)).subscribe( data => {
+  nuevaCompra() {
+    const sus = this._comercio.getCompras().pipe(take(1)).subscribe(data => {
       data.message[0].detalleProductos.forEach(dt => {
         this.dataTable.push([dt.inventario.nombre, dt.inventario.unidadMedida, dt.cantidad, dt.precioVentaCompra]);
         this.montoTotal = this.montoTotal + (dt.precioVentaCompra * dt.cantidad);
@@ -79,7 +83,7 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
     this._promesa.push(sus);
   }
 
-  registrar(){
+  registrar() {
     // this.showSpinner = true;
     // const comp = new CompraVentaModel();
     // comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
