@@ -47,15 +47,10 @@ export class MenuPrincipalPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private infoMenu: InfoMenu,
-    private _comercio: ComercioService,
-    private _infoNegocio: NegocioModel,
     private _speech: Speech
   ) { }
 
   ngOnInit() {
-    this._comercio.getInfoNegocio('fabian', 'Admin').subscribe(data =>
-      this._comercio.getInventario().subscribe(dta => console.log('getInventario'))
-    );
     this._speech.getPermission();
   }
 

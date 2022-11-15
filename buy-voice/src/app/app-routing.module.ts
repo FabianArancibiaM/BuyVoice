@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'folder/Inbox',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -55,6 +55,10 @@ const routes: Routes = [
   {
     path: 'menu-secundario',
     loadChildren: () => import('./components/menu/menu-secundario/menu-secundario.module').then( m => m.MenuSecundarioPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./components/login/login-routing.module').then( m => m.LoginPageRoutingModule)
   },
   {
     path: '**',
