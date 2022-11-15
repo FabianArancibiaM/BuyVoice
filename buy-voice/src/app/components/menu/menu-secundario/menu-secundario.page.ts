@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { InfoMenu } from 'src/app/models/info-menu.model';
@@ -13,7 +14,7 @@ export class MenuSecundarioPage implements OnInit {
   public dataChildren: Array<InfoSubMenu> = new Array<InfoSubMenu>();
   public title: string;
 
-  constructor(private infoMenu: InfoMenu, private navCtrl: NavController) { }
+  constructor(private infoMenu: InfoMenu, private navCtrl: NavController, private _infoSubMenu: InfoSubMenu) { }
 
   ngOnInit() {
     this.dataChildren = this.infoMenu.children;
@@ -21,6 +22,7 @@ export class MenuSecundarioPage implements OnInit {
   }
 
   redirectTo(card: InfoSubMenu ){
+    this._infoSubMenu.title = card.title;
     this.navCtrl.navigateForward([card.url]);
   }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-reporte',
@@ -7,7 +8,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportePage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public infoSubMenu: InfoSubMenu) { }
 
   ngOnInit() {
   }

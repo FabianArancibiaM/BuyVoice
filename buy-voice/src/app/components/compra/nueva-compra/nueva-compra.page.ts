@@ -10,6 +10,7 @@ import { ProductoComunModel } from 'src/app/models/producto-comun.model';
 import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { Speech } from 'src/app/service/speech.service';
 import { RecognitionToText } from 'src/app/service/recognition-to-text.service';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-nueva-compra',
@@ -34,7 +35,7 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   private _listaProdCmpra = new Array<ProductoComunModel>();
 
   constructor(private _comercio: ComercioService, private _infoNegocio: NegocioModel, private _speech: Speech,
-    private _cd: ChangeDetectorRef, private _recognitionToText: RecognitionToText) { }
+    private _cd: ChangeDetectorRef, private _recognitionToText: RecognitionToText, public infoSubMenu: InfoSubMenu) { }
 
   ngOnDestroy(): void {
     if (this._promesa && this._promesa.length > 0) {

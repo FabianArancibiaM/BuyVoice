@@ -3,6 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { Subscription, from } from 'rxjs';
 import { ICompra } from 'src/app/interfaces/ICompra.interface.interface';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 import { InventarioModel } from 'src/app/models/inventario.model';
 import { ComercioService } from 'src/app/service/comercio.service';
 import { DataManagementService } from 'src/app/service/data-management.service';
@@ -34,7 +35,8 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
   private promesa: Subscription[] = [];
 
   constructor(
-    private comercio: ComercioService
+    private comercio: ComercioService,
+    public infoSubMenu: InfoSubMenu
   ) { }
 
   ngOnInit() {

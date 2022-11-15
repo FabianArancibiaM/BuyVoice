@@ -9,6 +9,7 @@ import { ProductoComunModel } from 'src/app/models/producto-comun.model';
 import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { RecognitionToText } from 'src/app/service/recognition-to-text.service';
 import { Speech } from 'src/app/service/speech.service';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-nueva-venta',
@@ -33,7 +34,8 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
 
   constructor(private _comercio: ComercioService,
     private _infoNegocio: NegocioModel, private _recognitionToText: RecognitionToText, private _speech: Speech,
-    private _cd: ChangeDetectorRef) { }
+    private _cd: ChangeDetectorRef,
+    public infoSubMenu: InfoSubMenu) { }
 
   ngOnDestroy(): void {
   }

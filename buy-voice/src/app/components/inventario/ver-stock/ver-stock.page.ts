@@ -4,6 +4,7 @@ import { ComercioService } from 'src/app/service/comercio.service';
 import { InventarioModel } from 'src/app/models/inventario.model';
 import { ICompra } from 'src/app/interfaces/ICompra.interface.interface';
 import { ISelectorProducto } from 'src/app/interfaces/ISelectorProducto.interface';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-ver-stock',
@@ -26,7 +27,8 @@ export class VerStockPage implements OnInit, OnDestroy {
   private promesa: Subscription[] = [];
 
   constructor(
-    private comercio: ComercioService
+    private comercio: ComercioService,
+    public infoSubMenu: InfoSubMenu
   ) { }
 
   ngOnDestroy(): void {

@@ -24,18 +24,37 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
 
-
+body{
+    font-family: 'Roboto', sans-serif;
+}
 
 .my-custom-class {
+
     // --background: #000005c;
     // &::part(backdrop){
     //     background-color: red;
     // }
-    &::part(content){
+    &::part(content) {
         width: 80%;
         height: 50%;
         margin: auto;
         border-radius: 10px;
     }
-  }
+}
+ion-header ion-toolbar ion-buttons{
+    position: absolute;
+}
+ion-header ion-toolbar ion-title {
+    width: 242.79px;
+    height: 24px;
+    text-align: center;
+    width: 100%;
+    font-family: 'Plus Jakarta Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 100%;
+    color: #0C1E7F;
+}

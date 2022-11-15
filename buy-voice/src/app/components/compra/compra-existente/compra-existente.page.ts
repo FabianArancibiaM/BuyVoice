@@ -9,6 +9,8 @@ import { ModalController } from '@ionic/angular';
 import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { ModalEditProductsComponent } from 'src/app/ui/modal-edit-products/modal-edit-products.component';
 import { DataManagementService } from 'src/app/service/data-management.service';
+import { InfoMenu } from 'src/app/models/info-menu.model';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-compra-existente',
@@ -46,6 +48,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
 
 
   constructor(
+    public infoSubMenu: InfoSubMenu,
     private _comercio: ComercioService,
     private _modalControl: ModalController,
     private _management: DataManagementService

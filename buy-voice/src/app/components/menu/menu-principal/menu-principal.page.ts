@@ -21,14 +21,14 @@ export class MenuPrincipalPage implements OnInit {
   public listCard: IInfoCardMenu[] = [
     {
       title: 'Mis Compras', children: [
-        { title: 'Nueva Compra', url: '/nueva-compra' },
-        { title: 'Ver compras Realizadas', url: '/compra-existente' },
+        { title: 'Nueva compra', url: '/nueva-compra' },
+        { title: 'Ver historial', url: '/compra-existente' },
       ]
     },
     {
       title: 'Mis Ventas', children: [
-        { title: 'Nueva Venta', url: '/nueva-venta' },
-        { title: 'Ver ventas realizadas', url: '/venta-existente' },
+        { title: 'Nueva venta', url: '/nueva-venta' },
+        { title: 'Ver historial', url: '/venta-existente' },
       ]
     },
     {
@@ -47,7 +47,8 @@ export class MenuPrincipalPage implements OnInit {
   constructor(
     private navCtrl: NavController,
     private infoMenu: InfoMenu,
-    private _speech: Speech
+    private _speech: Speech,
+    private _infoSubMenu: InfoSubMenu
   ) { }
 
   ngOnInit() {
@@ -64,6 +65,7 @@ export class MenuPrincipalPage implements OnInit {
       listSubCard.push(obj);
     });
     this.infoMenu.children = listSubCard;
+    this._infoSubMenu.title = card.title;
     this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario' : listSubCard[0].url]);
   }
 

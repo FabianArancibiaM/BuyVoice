@@ -8,6 +8,7 @@ import { ICompraVenta } from 'src/app/interfaces/ICardCompraVenta.interface';
 import { ModalEditProductsComponent } from 'src/app/ui/modal-edit-products/modal-edit-products.component';
 import { ModalController } from '@ionic/angular';
 import { DataManagementService } from 'src/app/service/data-management.service';
+import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 
 @Component({
   selector: 'app-venta-existente',
@@ -46,7 +47,8 @@ export class VentaExistentePage implements OnInit, OnDestroy {
   constructor(
     private _comercio: ComercioService,
     private _modalControl: ModalController,
-    private _management: DataManagementService
+    private _management: DataManagementService,
+    public infoSubMenu: InfoSubMenu
   ) { }
 
   ngOnDestroy(): void {

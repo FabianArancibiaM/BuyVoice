@@ -1,22 +1,22 @@
-<ion-header style="width: 100% !important;">
+<ion-header>
 	<ion-toolbar>
-		<ion-title>Iniciar Sesión</ion-title>
+		<ion-title class="header-title">Iniciar Sesión</ion-title>
 	</ion-toolbar>
 </ion-header>
 <ion-content style="width: 100% !important;">
 	<form novalidate>
-		<ion-item >
-		  <ion-label position="floating">Usuario</ion-label>
-		  <ion-input type="text" required [(ngModel)]="model.nombre" placeholder="{{model.nombre}}"></ion-input>
+		<ion-item>
+			<ion-label position="floating">Usuario</ion-label>
+			<ion-input type="text" required [(ngModel)]="model.nombre" placeholder="{{model.nombre}}"></ion-input>
 		</ion-item>
-		<ion-item >
-		  <ion-label position="floating">Contraseña</ion-label>
-		  <ion-input type="password" required [(ngModel)]="model.pass" placeholder="{{model.pass}}"></ion-input>
+		<ion-item>
+			<ion-label position="floating">Contraseña</ion-label>
+			<ion-input type="password" required [(ngModel)]="model.pass" placeholder="{{model.pass}}"></ion-input>
 		</ion-item>
-		<ion-row>
-		  <ion-col>
-			<ion-button (click)="logIn()" class="button-login" expand="block">Ingresar</ion-button>
-		  </ion-col>
+		<ion-row class="row-login">
+			<ion-col >
+				<ion-button (click)="logIn()" class="button-login" expand="block">Ingresar</ion-button>
+			</ion-col>
 		</ion-row>
-	  </form>
+	</form>
 </ion-content>

@@ -1,16 +1,16 @@
 <ion-header>
 	<ion-toolbar>
-	  <ion-buttons slot="start">
-			  <ion-back-button></ion-back-button>
-		  </ion-buttons>
-	  <ion-title>{{title}}</ion-title>
+		<ion-buttons slot="start">
+			<ion-back-button></ion-back-button>
+		</ion-buttons>
+		<ion-title>{{title}}</ion-title>
 	</ion-toolbar>
-  </ion-header>
+</ion-header>
 <ion-content class="ion-padding">
 	<ion-list lines="none">
 		<ion-item *ngFor="let item of dataChildren" detail="true" (click)="redirectTo(item)">
-			<ion-label class="ion-text-wrap">
-				<h3>{{ item.title }}</h3>
+			<ion-label class="ion-text-wrap item-text">
+				{{ item.title }}
 			</ion-label>
 		</ion-item>
 	</ion-list>
