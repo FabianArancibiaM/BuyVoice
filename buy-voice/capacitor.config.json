@@ -1,6 +1,6 @@
 {
 	"appId": "io.ionic.starter",
-	"appName": "BuyVoice",
+	"appName": "SpeackNow",
 	"webDir": "www",
 	"bundledWebRuntime": false
 }
