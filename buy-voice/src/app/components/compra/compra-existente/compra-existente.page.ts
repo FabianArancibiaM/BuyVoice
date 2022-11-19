@@ -65,7 +65,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this.showSpinner = true;
     this._promesa = [];
     this._promesa.push(this._comercio.getInventario().subscribe());
-    this._promesa.push(this._comercio.getCompras().pipe(take(1)).subscribe( (datos) => {
+    this._promesa.push(this._comercio.getCompras().pipe().subscribe( (datos) => {
       datos.message.forEach(dts => {
         if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
       });

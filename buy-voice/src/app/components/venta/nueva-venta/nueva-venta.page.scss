@@ -3,15 +3,23 @@
     height: 70%;
     margin: 10px;
     overflow: auto;
+    box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f;
 }
 .divTextArea {
-    background-color: aquamarine;
     margin: 10px;
     height: 15%;
     text-align: end;
 }
 .textArea {
     // width: 100%;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.montoTotal{
+    margin-top: 0;
+    font-size: 24px;
+    padding-top: 10px;
+    padding-right: 10px;
 }
 .divRecord{
     text-align: center;
@@ -19,6 +27,11 @@
 }
 .buttonRecord {
     --border-radius: 80%!important;
+    --background: #20B2A3;
+    --background-hover: #296e67;
+    --background-activated: #296e67;
+    --background-focused: #296e67;
+    --color: white;
 }
 .record {
     
@@ -30,3 +43,27 @@
     position: inherit;
     z-index: 99999;
   }
+  .finish{
+    --background: #E6007E;
+    --background-hover: #f8038afd;
+    --background-activated: #E963AC;
+    --background-focused: #E963AC;
+    --color: white;
+  }
+  .divSpinner {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.spinerGeneral{
+    --color: #E6007E;
+}
+ion-spinner {
+    transform: scale(6);
+}

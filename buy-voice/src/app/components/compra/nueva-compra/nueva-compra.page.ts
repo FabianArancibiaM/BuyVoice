@@ -52,21 +52,22 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   }
 
   startListening() {
-    //   const frase = ['1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
-    //   '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
+    //   const frase = [
+    //     // '1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
+    //   // '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
+    //   "5 kg de palta chilena a $12000"
     // ];
     //   const listObject = this._recognitionToText.recognition(frase, 'COMPRA');
-    //     listObject.forEach(obj => {
-    //       this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, obj.precio]);
-    //       this.montoTotal = this.montoTotal + (obj.cantidad*parseInt(obj.precio)); 
-    //     });
+    //   this.textRecognition = frase[0]
+    //   listObject.forEach(obj => {
+    //     this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, obj.precio]);
+    //     this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
+    //   });
     this._speech.initServiceSpeech().subscribe(matches => {
       this.textRecognition = matches;
-      console.log('matches', matches)
       const listObject = this._recognitionToText.recognition(matches,'COMPRA');
-      console.log('listObject', JSON.stringify(listObject));
       listObject.forEach(obj => {
-        this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, 0]);
+        this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio)]);
         this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
       });
       this._cd.detectChanges();

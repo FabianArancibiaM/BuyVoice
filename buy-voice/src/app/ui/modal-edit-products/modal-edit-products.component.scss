@@ -1,7 +1,7 @@
 ion-modal {
     --height: 50%;
     --border-radius: 16px;
-    --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    // --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   }
   
   ion-modal::part(backdrop) {
@@ -13,3 +13,33 @@ ion-modal {
   //   --background: rgb(14 116 144);
   //   --color: white;
   // }
+
+  input {
+    margin-top: 10px;
+    text-align: center;
+    outline: 0;
+    border-width: 0 0 2px;
+    border-color: #58D7CA;
+  }
+
+  ion-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+  p {
+    margin-top: 0;
+    font-style: normal;
+    font-weight: 700;
+    text-align: center;
+    color: #0C1E7F;
+  }
+
+  .btnActualizar {
+    --color: #296e67;
+  }
+
+  .btnQuitar{
+    --color: #E6007E;
+  }

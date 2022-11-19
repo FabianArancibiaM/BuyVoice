@@ -29,11 +29,43 @@
     width: 95%;
     position: fixed;
     bottom: 50px;
+    --background: #20B2A3;
+    --background-hover: #296e67;
+    --background-activated: #296e67;
+    --background-focused: #296e67;
+    --color: white;
+    --border-radius: 4px;
+    --border-color: #20B2A3;
+    --border-style: solid;
+    --border-width: 0px;
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
 }
 .button-cancel {
     width: 95%;
     position: fixed;
     bottom: 10px;
+    --background: #E6007E;
+    --background-hover: #f8038afd;
+    --background-activated: #E963AC;
+    --background-focused: #E963AC;
+    --color: white;
+    --border-radius: 4px;
+    --border-color: #E963AC;
+    --border-style: solid;
+    --border-width: 0px;
+  
+    --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  
+    --ripple-color: deeppink;
+  
+    --padding-top: 10px;
+    --padding-bottom: 10px;
 }
 .text-tt {
     width: 95%;
@@ -43,4 +75,21 @@
     z-index: 99;
     background-color: white;
     text-align: center;
+}
+.divSpinner {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.spinerGeneral{
+    --color: #E6007E;
+}
+ion-spinner {
+    transform: scale(6);
 }

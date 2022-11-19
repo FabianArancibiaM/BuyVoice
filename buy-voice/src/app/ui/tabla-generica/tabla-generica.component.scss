@@ -2,17 +2,23 @@
     // height: 100%;
     background-color: white;
     color: black;
+    table-layout: auto;
+    white-space: normal;
 }
 .tableTitle {
-    background-color: lightblue;
     font-size: 13px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    font-weight: bold;
 }
 .table ion-col {
-    border: 1px solid;
+    // border: 1px solid;
 }
 .tableBody ion-col {
-    border: 1px solid;
+    // border: 1px solid;
     font-size: 13px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 .button-option{
     // width: 15px;

@@ -66,11 +66,9 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
     //     });
     this._speech.initServiceSpeech().subscribe(matches => {
       this.textRecognition = matches;
-      console.log('matches', matches)
       const listObject = this._recognitionToText.recognition(matches,'VENTA');
-      console.log('listObject', JSON.stringify(listObject));
       listObject.forEach(obj => {
-        this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, 0]);
+        this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, obj.precio]);
         this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
       });
       this._cd.detectChanges();

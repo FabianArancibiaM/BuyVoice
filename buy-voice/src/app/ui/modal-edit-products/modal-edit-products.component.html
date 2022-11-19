@@ -1,14 +1,25 @@
-<ion-card> Usar para los Items
+<ion-list [inset]="true">
   <form novalidate>
-    <p>Producto: </p>
-    <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
-    <input name="cantidad" required [(ngModel)]="model.cantidad" placeholder="{{model.cantidad}}">
-    <input name="precio" required [(ngModel)]="model.precioVentaCompra" placeholder="{{model.precioVentaCompra}}">
-    <ion-button (click)="onSubmit()" expand="block" fill="clear" shape="round" >
+    <p>Modificar Producto</p>
+    <ion-label>Nombre del Produto:</ion-label>
+    <ion-item>
+      <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
+    </ion-item>
+    <ion-label>Cantidad:</ion-label>
+    <ion-item>
+      <input name="cantidad" required [(ngModel)]="model.cantidad" placeholder="{{model.cantidad}}">
+    </ion-item>
+    <ion-label>Precio:</ion-label>
+    <ion-item>
+      <input name="precio" required [(ngModel)]="model.precioVentaCompra" placeholder="{{model.precioVentaCompra}}">
+    </ion-item>
+  </form>
+  <ion-item>
+    <ion-button (click)="onSubmit()" expand="block" fill="clear" shape="round" class="btnActualizar" >
       Actualizar
     </ion-button>
-  </form>
-  <ion-button (click)="removeProduct()" expand="block" fill="clear" shape="round" [disabled]="removeView" >
-    Quitar Producto
-  </ion-button>
-</ion-card>
+    <ion-button (click)="removeProduct()" expand="block" fill="clear" shape="round" [disabled]="removeView" class="btnQuitar">
+      Eliminar
+    </ion-button>
+  </ion-item>
+</ion-list>
