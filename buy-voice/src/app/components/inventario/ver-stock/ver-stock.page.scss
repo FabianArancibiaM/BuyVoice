@@ -18,6 +18,10 @@
 }
 
 .itemScroll{
-    overflow: scroll;
-    height: 300px;
+    overflow: auto;
+    height: 240px;
+}
+
+::-webkit-scrollbar {
+    display: none;
 }

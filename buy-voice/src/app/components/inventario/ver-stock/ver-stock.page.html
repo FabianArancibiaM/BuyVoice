@@ -30,30 +30,30 @@
     </ion-card>
     <div *ngIf="boletaCompra.length>0" class="divHisCompra">
       <ion-label>
-        <h1>Fecha de compras</h1>
+        <h1>Compras realizadas</h1>
       </ion-label>
       <ion-grid>
         <ion-row class="itemTitleCompra">
-          <ion-col >
-            <h1>Fecha</h1>
+          <ion-col size="4" >
+            <p>Fecha</p>
           </ion-col>
-          <ion-col >
-            <h1>Cantidad</h1> 
+          <ion-col size="4" >
+            <p>Cantidad</p> 
           </ion-col>
-          <ion-col >
-            <h1>Precio</h1>
+          <ion-col size="4" >
+            <p>Precio</p>
           </ion-col>
         </ion-row>
         <div class="itemScroll">
           <ion-row *ngFor="let i of boletaCompra" class="itemCompra">
-            <ion-col >
-              <h3>{{i.fecha}}</h3>
+            <ion-col size="4" >
+              <p style="font-size: 15px;">{{i.fecha}}</p>
             </ion-col>
-            <ion-col >
-              <h3>{{i.cantidad}}</h3>
+            <ion-col size="4" >
+              <p>{{i.cantidad}}</p>
             </ion-col>
-            <ion-col >
-              <h3>{{i.total}}</h3>
+            <ion-col size="4" >
+              <p>{{i.total}}</p>
             </ion-col>
           </ion-row>
         </div>

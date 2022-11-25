@@ -5,11 +5,13 @@ import { Subscription, from } from 'rxjs';
 import { ICompra } from 'src/app/interfaces/ICompra.interface.interface';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
 import { InventarioModel } from 'src/app/models/inventario.model';
+import { MessageModal } from 'src/app/models/message-modal.model';
 import { ComercioService } from 'src/app/service/comercio.service';
 import { DataManagementService } from 'src/app/service/data-management.service';
 import { FlowType } from 'src/app/types/FlowType.types';
 import { listaCategoria, listMedida, UnitType } from 'src/app/types/UnitType.types';
 import { ModalEditInventoryComponent } from 'src/app/ui/modal-edit-inventory/modal-edit-inventory.component';
+import { ModalGenericoComponent } from 'src/app/ui/modal-generico/modal-generico.component';
 
 interface IInventary {
   name: string;
@@ -32,18 +34,23 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
   public selectedProd: InventarioModel = undefined;
   public details: IInventary = undefined;
   public medidaDefault = '';
+  public showSpinner = false;
   private promesa: Subscription[] = [];
 
   constructor(
     private comercio: ComercioService,
-    public infoSubMenu: InfoSubMenu
+    public infoSubMenu: InfoSubMenu,
+    private _modalControl: ModalController,
+    private message: MessageModal
   ) { }
 
   ngOnInit() {
+    this.showSpinner = true;
     this.promesa.push(this.comercio.getInventario().subscribe(data => {
       this.listaInventario = data.message;
       this.listaMedidas = listMedida;
       this.listadoCategoria = listaCategoria;
+      this.showSpinner = false;
     }));
   }
 
@@ -67,7 +74,17 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
   }
 
   async selectedProperty(){
-    this.promesa.push(this.comercio.updateInventario(this.selectedProd).subscribe(data => { console.log(data);}));
+    const modal = await this._modalControl.create({
+      component: ModalGenericoComponent,
+      cssClass: 'my-modal-generic-class',
+    });
+    this.showSpinner = true;
+    this.promesa.push(this.comercio.updateInventario(this.selectedProd).subscribe(async data => {
+      this.message.title = 'Se actualizo correctamente';
+      this.showSpinner = false;
+      this.promesa.push(from(modal.onDidDismiss()).subscribe(() => {}));
+      await modal.present();
+    }));
   }
 
 }

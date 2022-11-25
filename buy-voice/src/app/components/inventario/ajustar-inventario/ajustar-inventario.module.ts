@@ -8,6 +8,7 @@ import { AjustarInventarioPageRoutingModule } from './ajustar-inventario-routing
 
 import { AjustarInventarioPage } from './ajustar-inventario.page';
 import { ModalEditInventoryModule } from 'src/app/ui/modal-edit-inventory/modal-edit-inventory.module';
+import { ModalGenericoModule } from 'src/app/ui/modal-generico/modal-generico.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { ModalEditInventoryModule } from 'src/app/ui/modal-edit-inventory/modal-
     FormsModule,
     IonicModule,
     AjustarInventarioPageRoutingModule,
-    ModalEditInventoryModule
+    ModalEditInventoryModule,
+    ModalGenericoModule
   ],
   declarations: [AjustarInventarioPage]
 })

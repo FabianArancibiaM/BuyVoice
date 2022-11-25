@@ -147,6 +147,8 @@ export class VentaExistentePage implements OnInit, OnDestroy {
         }
       });
       this.showSpinner = false;
+      this.showDetails = false;
+      this.showcardGeneral = true;
     }));
     
   }

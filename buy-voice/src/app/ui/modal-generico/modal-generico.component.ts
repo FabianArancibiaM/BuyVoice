@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { MessageModal } from 'src/app/models/message-modal.model';
 
 @Component({
   selector: 'app-modal-generico',
@@ -7,8 +9,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ModalGenericoComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private controller: ModalController,
+    public message: MessageModal
+  ) { }
 
   ngOnInit() {}
-
+  
+  close(){
+    this.controller.dismiss();
+  }
 }

@@ -19,6 +19,10 @@
     </ion-list>
   </div>
 
+  <div class="divSpinner" *ngIf="showSpinner"> 
+    <ion-spinner *ngIf="showSpinner" name="dots" class="spinerGeneral"></ion-spinner>
+  </div>
+
   <ion-card class="divCampEdit" *ngIf="selectedProd">
     <ion-card-header>
       <ion-card-title>{{selectedProd.nombre}}</ion-card-title>

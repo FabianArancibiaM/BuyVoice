@@ -1,9 +1,10 @@
 <ion-list [inset]="true">
   <form novalidate>
-    <p>Modificar Producto</p>
+    <div class="section-form">
+      <p>Modificar Producto</p>
     <ion-label>Nombre del Produto:</ion-label>
     <ion-item>
-      <input name="nombre" required  [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
+      <input name="nombre" [(ngModel)]="model.inventario.nombre" placeholder="{{model.inventario.nombre}}" [disabled]="flowView" >
     </ion-item>
     <ion-label>Cantidad:</ion-label>
     <ion-item>
@@ -13,13 +14,16 @@
     <ion-item>
       <input name="precio" required [(ngModel)]="model.precioVentaCompra" placeholder="{{model.precioVentaCompra}}">
     </ion-item>
+    </div>
   </form>
   <ion-item>
-    <ion-button (click)="onSubmit()" expand="block" fill="clear" shape="round" class="btnActualizar" >
-      Actualizar
-    </ion-button>
-    <ion-button (click)="removeProduct()" expand="block" fill="clear" shape="round" [disabled]="removeView" class="btnQuitar">
-      Eliminar
-    </ion-button>
+    <div class="section-button">
+      <ion-button (click)="onSubmit()" expand="block" fill="clear" shape="round" class="btnActualizar" >
+        Actualizar
+      </ion-button>
+      <ion-button (click)="removeProduct()" expand="block" fill="clear" shape="round" [disabled]="removeView" class="btnQuitar">
+        Eliminar
+      </ion-button>
+    </div>
   </ion-item>
 </ion-list>
