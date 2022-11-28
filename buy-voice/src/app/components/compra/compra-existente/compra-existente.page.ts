@@ -5,12 +5,14 @@ import { ComercioService } from 'src/app/service/comercio.service';
 /* eslint-disable no-underscore-dangle */
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ICompraVenta } from 'src/app/interfaces/ICardCompraVenta.interface';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { ModalEditProductsComponent } from 'src/app/ui/modal-edit-products/modal-edit-products.component';
 import { DataManagementService } from 'src/app/service/data-management.service';
 import { InfoMenu } from 'src/app/models/info-menu.model';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
+import { ManagerModal } from 'src/app/service/manager-modal.service';
+import { ModalGenericoComponent } from 'src/app/ui/modal-generico/modal-generico.component';
 
 @Component({
   selector: 'app-compra-existente',
@@ -51,7 +53,9 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     public infoSubMenu: InfoSubMenu,
     private _comercio: ComercioService,
     private _modalControl: ModalController,
-    private _management: DataManagementService
+    private _management: DataManagementService,
+    private _managerModal: ManagerModal,
+    private _navCtrl: NavController
   ) { }
   ngOnDestroy(): void {
     if(this._promesa && this._promesa.length>0){
@@ -60,19 +64,35 @@ export class CompraExistentePage implements OnInit, OnDestroy {
     this._management.flow = 'INICIO';
   }
 
+  errorPrincipal(){
+    this._managerModal.configMessage('ERR-GENERIC');
+    this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {
+      this._navCtrl.navigateForward(['menu-secundario']);
+    });
+  }
+
   async ngOnInit() {
     this._management.flow = 'COMPRA';
     this.showSpinner = true;
     this._promesa = [];
-    this._promesa.push(this._comercio.getInventario().subscribe());
+    this._promesa.push(this._comercio.getInventario().subscribe(data => {
+      if(data.status === 'NOK'){
+        this.showSpinner = false;
+        this.errorPrincipal();
+      }
+    }, err => console.log(err)));
     this._promesa.push(this._comercio.getCompras().pipe().subscribe( (datos) => {
-      datos.message.forEach(dts => {
-        if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
-      });
-      this._nuevaVnt = [];
-      this._nuevaVnt = datos.message;
+      if(datos.status === 'OK'){
+        datos.message.forEach(dts => {
+          if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
+        });
+        this._nuevaVnt = [];
+        this._nuevaVnt = datos.message;
+      } else {
+        this.errorPrincipal();
+      }
       this.showSpinner = false;
-    }));
+    }, err => console.log(err)));
   }
 
   eventClick(evento){

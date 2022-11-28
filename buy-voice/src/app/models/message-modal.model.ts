@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 export class MessageModal {
     private _title: string;
     private _description: string;
+    private _code: string;
     constructor() { }
 
     set title(v: string) {
@@ -16,6 +17,13 @@ export class MessageModal {
 
     set description(v: string) {
         this._description = v;
+    }
+    set code(v: string) {
+        this._code = v;
+    }
+
+    get code() {
+        return this._code;
     }
 
     get title() {

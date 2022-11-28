@@ -189,6 +189,7 @@ export class VentaExistentePage implements OnInit, OnDestroy {
     this._promesa.push(from(modal.onDidDismiss()).subscribe(() => {
       this.showSpinner = true;
       this._promesa.push(this._comercio.getInventario().subscribe());
+
       this._promesa.push(this._comercio.getVentas().pipe(take(1)).subscribe( (datos) => {
         this._nuevaVnt = [];
         this._nuevaVnt = datos.message;

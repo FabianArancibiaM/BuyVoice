@@ -11,6 +11,9 @@ import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { Speech } from 'src/app/service/speech.service';
 import { RecognitionToText } from 'src/app/service/recognition-to-text.service';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
+import { ManagerModal } from 'src/app/service/manager-modal.service';
+import { ModalGenericoComponent } from 'src/app/ui/modal-generico/modal-generico.component';
+import { InventarioModel } from 'src/app/models/inventario.model';
 
 @Component({
   selector: 'app-nueva-compra',
@@ -34,8 +37,9 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
   private _promesa: Subscription[];
   private _listaProdCmpra = new Array<ProductoComunModel>();
 
-  constructor(private _comercio: ComercioService, private _infoNegocio: NegocioModel, private _speech: Speech,
-    private _cd: ChangeDetectorRef, private _recognitionToText: RecognitionToText, public infoSubMenu: InfoSubMenu) { }
+  constructor(private _comercio: ComercioService, private _speech: Speech, private _infoNegocio: NegocioModel,
+    private _cd: ChangeDetectorRef, private _recognitionToText: RecognitionToText, public infoSubMenu: InfoSubMenu,
+    private _managerModal: ManagerModal) { }
 
   ngOnDestroy(): void {
     if (this._promesa && this._promesa.length > 0) {
@@ -46,55 +50,84 @@ export class NuevaCompraPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._promesa = [];
-    this._promesa.push(this._comercio.getInventario().subscribe());
+    this._promesa.push(this._comercio.getInventario().subscribe(data => {}, err => console.log(err)));
     this._listaProdCmpra = [];
     this.dataTable = [];
   }
 
   startListening() {
+    const errorListening = (txt) => {
+      this._managerModal.configMessage('MICRO-500');
+      this._managerModal.configMessageDEBUG(txt);
+      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class');
+    };
     //   const frase = [
     //     // '1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
     //   // '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
-    //   "5 kg de palta chilena a $12000"
+    //   // "5 kg de palta chilena a $12000"
+    //   // "5 unidades de piña a $7000"
+    //   "tres lechugas por $1000"
     // ];
-    //   const listObject = this._recognitionToText.recognition(frase, 'COMPRA');
-    //   this.textRecognition = frase[0]
-    //   listObject.forEach(obj => {
-    //     this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, obj.precio]);
+    // const listObject = this._recognitionToText.recognition(frase,'COMPRA');
+    // const antes = this.dataTable.length;
+    // listObject.forEach(obj => {
+    //   if([1,2,3].includes(obj.rule)){
+    //     this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio)]);
     //     this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
-    //   });
+    //   }
+    // });
+    //   if(this.dataTable.length === antes){
+    //     errorListening(`${frase} - ${JSON.stringify(listObject)}`);
+    //   }
+
     this._speech.initServiceSpeech().subscribe(matches => {
       this.textRecognition = matches;
       const listObject = this._recognitionToText.recognition(matches,'COMPRA');
+      const antes = this.dataTable.length;
       listObject.forEach(obj => {
-        this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio)]);
-        this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio));
+        if([1,2,3].includes(obj.rule)){
+          this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio, 10)]);
+          this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio, 10));
+        }
       });
       this._cd.detectChanges();
+      if(this.dataTable.length === antes){
+        errorListening(`${matches} - ${JSON.stringify(listObject)}`);
+      }
+    }, err => {
+      errorListening(err);
     });
-  }
-
-  nuevaCompra() {
-    const sus = this._comercio.getCompras().pipe(take(1)).subscribe(data => {
-      data.message[0].detalleProductos.forEach(dt => {
-        this.dataTable.push([dt.inventario.nombre, dt.inventario.unidadMedida, dt.cantidad, dt.precioVentaCompra]);
-        this.montoTotal = this.montoTotal + (dt.precioVentaCompra * dt.cantidad);
-        this._listaProdCmpra.push(dt);
-      });
-    });
-    this._promesa.push(sus);
   }
 
   registrar() {
-    // this.showSpinner = true;
-    // const comp = new CompraVentaModel();
-    // comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
-    // comp.totalVentaCompra = this.montoTotal;
-    // comp.detalleProductos = this._listaProdCmpra;
-    // const sus = this._comercio.generarCompra(comp).subscribe(data2 => {
-    //   this.showSpinner = false;
-    // });
-    // this._promesa.push(sus);
+    this.showSpinner = true;
+    const comp = new CompraVentaModel();
+    comp.comerciante = this._infoNegocio.usuarios.find(usu => usu.activo === true);
+    comp.totalVentaCompra = this.montoTotal;
+    const listPro: Array<ProductoComunModel> = [];
+    this.dataTable.forEach( data => {
+      const model = new ProductoComunModel();
+      model.cantidad = data[2];
+      model.precioVentaCompra = data[3];
+      model.unidadMedidaVenta = data[1];
+      const invent = new InventarioModel();
+      invent.nombre = data[0];
+      model.inventario = invent;
+      listPro.push(model);
+    });
+    comp.detalleProductos = listPro;
+    const sus = this._comercio.generarCompra(comp).subscribe(data2 => {
+      const result = data2.status === 'OK' ? 'G-200': 'G-500';
+      const method = data2.status === 'OK' ? () => {
+        this.dataTable= [];
+        this.montoTotal = 0;
+        this.textRecognition = '';
+      } : () =>{};
+      this._managerModal.configMessage(result);
+      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', method);
+      this.showSpinner = false;
+    });
+    this._promesa.push(sus);
   }
 
 }

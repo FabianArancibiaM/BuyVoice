@@ -1,6 +1,7 @@
 <ion-content class="ion-padding">
-  <p>{{message.title}}</p>
-  <ion-button  expand="block" fill="clear" shape="round" class="btnCerrar" (click)="close()" >
-    Cerrar
-  </ion-button>
+  <ion-title>{{message.title}}</ion-title>
+  <p>{{message.description}}</p>
+  <button  expand="block" fill="clear" shape="round" class='btnCerrar btnCerrar--{{message.code}}' (click)="close()" >
+    <span>Cerrar</span>
+  </button>
 </ion-content>

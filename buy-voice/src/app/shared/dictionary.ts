@@ -1,4 +1,4 @@
-export const CONECTOR_LIST = ['de', 'y', 'a'];
+export const CONECTOR_LIST = ['de', 'y', 'a', 'por'];
 
 export const PATTERN_LIST = [
     {

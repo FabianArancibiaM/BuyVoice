@@ -9,6 +9,7 @@ interface IProduct{
   unidad: string;
   nombre: string;
   precio: string;
+  rule: number;
 }
 
 @Injectable({
@@ -29,7 +30,8 @@ export class RecognitionToText {
     this._unidList = DEFINITION_PRODUCTS.porMayor.unidad.concat(DEFINITION_PRODUCTS.porMenor.unidad);
   }
   recognition(frase: string[], flow) {
-    console.log('frase', JSON.stringify(frase));
+    try {
+      console.log('frase', JSON.stringify(frase));
 
     const conetoresList = CONECTOR_LIST;
     const patrones = PATTERN_LIST;
@@ -39,7 +41,6 @@ export class RecognitionToText {
     // nombre prod
     // const frase = 'dos kilos manzana dos unidades piñas y tres tiras de vit. C aparte un kilo mas de manzana y una piña mas';
     // const frase = ['1 kg de manzana y dos de piña y otra piña'];
-
     let txt = '';
     frase.forEach(world => (txt = txt + ' ' + world));
     const arrFrase = txt
@@ -72,6 +73,10 @@ export class RecognitionToText {
     });
 
     return prod;
+    } catch (err){
+      console.log(err)
+      return [];
+    }
   }
 
   unitMeasurement(item: IProduct){
@@ -101,8 +106,8 @@ export class RecognitionToText {
   }
 
   esCantidad = palabra => !isNaN(palabra) || CANT_LIST.includes(palabra);
-  unidadMed = palabra => this._unidList.find(unidad => unidad.includes(palabra)) !== undefined;
-  nombre = palabra => this._prodList.find(unidad => unidad.includes(palabra)) !== undefined;
+  unidadMed = palabra => this._unidList.find(unidad => unidad.includes(palabra) || palabra.includes(unidad)) !== undefined;
+  nombre = palabra => this._prodList.find(unidad => unidad.includes(palabra) || ( palabra && palabra.includes(unidad)) ) !== undefined;
   precio = palabra => palabra !== undefined && palabra.includes('$');
 
   validNum(num){
@@ -114,6 +119,10 @@ export class RecognitionToText {
       {
         value: 2,
         keys: ['do', 'dos']
+      },
+      {
+        value: 3,
+        keys: ['tre', 'tres']
       }
     ];
 
@@ -167,7 +176,8 @@ export class RecognitionToText {
           cantidad: this.validNum(arrFrase[posi]),
           unidad: arrFrase[posi + 1],
           nombre: this.validName(arrFrase[posi + 2], posi + 2, arrFrase),
-          precio: result.precio ? arrFrase[posi + posiAmount] : '0'
+          precio: result.precio ? arrFrase[posi + posiAmount] : '0',
+          rule: 1
         }
       };
     }
@@ -178,7 +188,8 @@ export class RecognitionToText {
           cantidad: this.validNum(arrFrase[posi]),
           unidad: '',
           nombre: this.validName(arrFrase[posi + 1], posi + 1, arrFrase),
-          precio: result.precio ? arrFrase[posi + posiAmount] : '0'
+          precio: result.precio ? arrFrase[posi + posiAmount] : '0',
+          rule: 2
         }
       };
     }
@@ -189,7 +200,8 @@ export class RecognitionToText {
           cantidad: '',
           unidad: '',
           nombre: this.validName(arrFrase[posi], posi, arrFrase),
-          precio: result.precio ? arrFrase[posi + posiAmount] : '0'
+          precio: result.precio ? arrFrase[posi + posiAmount] : '0',
+          rule: 3
         }
       };
     }

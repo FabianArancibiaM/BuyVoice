@@ -16,8 +16,7 @@ import { ModalGenericoModule } from 'src/app/ui/modal-generico/modal-generico.mo
     FormsModule,
     IonicModule,
     AjustarInventarioPageRoutingModule,
-    ModalEditInventoryModule,
-    ModalGenericoModule
+    ModalEditInventoryModule
   ],
   declarations: [AjustarInventarioPage]
 })

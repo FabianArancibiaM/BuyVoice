@@ -159,55 +159,34 @@ export class ComercioService {
       this._firestore.getAllCompra(this._infoNegocio.id).pipe(take(1)).subscribe(
         data => {
           this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe( invProd => {
-
             const fechaActual = new Date();
             const mes = (fechaActual.getMonth()+1) < 10 ? `0${fechaActual.getMonth()+1}` : fechaActual.getMonth()+1;
             const dia = fechaActual.getUTCDate()  < 10 ? `0${fechaActual.getUTCDate()}` : fechaActual.getUTCDate();
             const anno = fechaActual.getFullYear();
             const stringFecha = `${dia}-${mes}-${anno}`;
-            const diaIniciado = data[stringFecha];
-            let idVentas = 0;
-            if(!diaIniciado){
-              idVentas = 1;
-            } else {
-              idVentas = diaIniciado.length > 0 ? diaIniciado[diaIniciado.length-1].id_compra + 1 : 1;
-            }
-            const objCompra = {
-              id_compra: idVentas,
-              total_compra: nuevaCompra.totalVentaCompra,
-              id_usuario: nuevaCompra.comerciante.id,
-              fecha: `${dia}/${mes}/${anno}`,
-              estado: 'realizado',
-              detalle_productos: nuevaCompra.detalleProductos.map(prod => ({
-                cantidad: prod.cantidad,
-                id_inventario: prod.inventario.id,
-                precio_compra: prod.precioVentaCompra
-              }))
-            };
-            const obj = !diaIniciado ? {[stringFecha]: [objCompra] } : {[stringFecha]: [...diaIniciado, objCompra] };
 
             nuevaCompra.detalleProductos.forEach( p => {
-              const invProdSelect = invProd.productos.find( x => x.nombre === p.inventario.nombre);
+              const invProdSelect = invProd.productos.find( x => x.nombre.toUpperCase() === p.inventario.nombre.toUpperCase());
               if(invProdSelect){
                 invProdSelect.cantidad_disponible = Number(invProdSelect.cantidad_disponible) + Number(p.cantidad);
                 if(invProdSelect.fecha_compra.length === 10){
-                  invProdSelect.fecha_compra = [ objCompra.fecha,
+                  invProdSelect.fecha_compra = [ stringFecha.replace('-', '/').replace('-', '/'),
                     invProdSelect.fecha_compra[0], invProdSelect.fecha_compra[1], invProdSelect.fecha_compra[2],
                     invProdSelect.fecha_compra[3], invProdSelect.fecha_compra[4], invProdSelect.fecha_compra[5],
                     invProdSelect.fecha_compra[6], invProdSelect.fecha_compra[7], invProdSelect.fecha_compra[8]];
                 } else {
-                  invProdSelect.fecha_compra = [objCompra.fecha, ...invProdSelect.fecha_compra];
+                  invProdSelect.fecha_compra = [stringFecha.replace('-', '/').replace('-', '/'), ...invProdSelect.fecha_compra];
                 }
               } else {
                 const newInvent = {
                   cantidad_disponible: p.cantidad,
                   cantidad_perdida: 0,
-                  fecha_compra: [objCompra.fecha],
+                  fecha_compra: [stringFecha.replace('-', '/').replace('-', '/')],
                   id: invProd.productos.length + 1,
                   nombre: p.inventario.nombre,
                   precio_venta_actual: 0,
-                  unidad_medida: p.inventario.unidadMedida,
-                  unidad_medida_venta: ''
+                  unidad_medida: p.unidadMedidaVenta,
+                  unidad_medida_venta: p.unidadMedidaVenta
                 };
                 invProd.productos = [newInvent, ...invProd.productos];
               }
@@ -215,9 +194,38 @@ export class ComercioService {
 
             this._firestore.updateInventario(invProd, this._infoNegocio.id).subscribe(
               result => {
-                this._firestore.newPurchase(obj,this._infoNegocio.id).subscribe(
-                  () => observer.next({status: 'OK', message: ''})
-                  , err => {
+                this._firestore.getAllInventario(this._infoNegocio.id).pipe(take(1)).subscribe(
+                  data2 => {
+                    const diaIniciado = data[stringFecha];
+                    let idVentas = 0;
+                    if(!diaIniciado){
+                      idVentas = 1;
+                    } else {
+                      idVentas = diaIniciado.length > 0 ? diaIniciado[diaIniciado.length-1].id_compra + 1 : 1;
+                    }
+                    const objCompra = {
+                      id_compra: idVentas,
+                      total_compra: nuevaCompra.totalVentaCompra,
+                      id_usuario: nuevaCompra.comerciante.id,
+                      fecha: stringFecha.replace('-', '/').replace('-', '/'),
+                      estado: 'realizado',
+                      detalle_productos: nuevaCompra.detalleProductos.map(prod => ({
+                        cantidad: prod.cantidad,
+                        id_inventario: invProd.productos.find( x => x.nombre.toUpperCase() === prod.inventario.nombre.toUpperCase()).id,
+                        precio_compra: prod.precioVentaCompra
+                      }))
+                    };
+                    const obj = !diaIniciado ? {[stringFecha]: [objCompra] } : {[stringFecha]: [...diaIniciado, objCompra] };
+
+                    this._firestore.newPurchase(obj,this._infoNegocio.id).subscribe(
+                      () => observer.next({status: 'OK', message: ''})
+                      , err => {
+                        console.log(err);
+                        observer.next({status: 'NOK', message: 'Se produjo un error', err});
+                      }
+                    );
+                  },
+                  err => {
                     console.log(err);
                     observer.next({status: 'NOK', message: 'Se produjo un error', err});
                   }
@@ -235,7 +243,7 @@ export class ComercioService {
         }
       );
     };
-    return new Observable(method);
+    return new Observable<any>(method);
   }
 
   updateCompra(management: DataManagementService){

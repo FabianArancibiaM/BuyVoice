@@ -8,6 +8,7 @@ import { InventarioModel } from 'src/app/models/inventario.model';
 import { MessageModal } from 'src/app/models/message-modal.model';
 import { ComercioService } from 'src/app/service/comercio.service';
 import { DataManagementService } from 'src/app/service/data-management.service';
+import { ManagerModal } from 'src/app/service/manager-modal.service';
 import { FlowType } from 'src/app/types/FlowType.types';
 import { listaCategoria, listMedida, UnitType } from 'src/app/types/UnitType.types';
 import { ModalEditInventoryComponent } from 'src/app/ui/modal-edit-inventory/modal-edit-inventory.component';
@@ -40,8 +41,7 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
   constructor(
     private comercio: ComercioService,
     public infoSubMenu: InfoSubMenu,
-    private _modalControl: ModalController,
-    private message: MessageModal
+    private _managerModal: ManagerModal
   ) { }
 
   ngOnInit() {
@@ -58,6 +58,7 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
     if (this.promesa && this.promesa.length > 0) {
       this.promesa.forEach(p => p.unsubscribe());
     }
+    this._managerModal.closeSuscriptionModal();
   }
 
   buscarProducto(evento) {
@@ -65,25 +66,21 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
     this.medidaDefault = this.selectedProd.unidadMedidaVenta;
   }
 
-  categoriaSelected(evento){
+  categoriaSelected(evento) {
     this.selectedProd.unidadMedida = evento.detail.value;
   }
 
-  medidaSelected(evento){
+  medidaSelected(evento) {
     this.selectedProd.unidadMedidaVenta = evento.detail.value;
   }
 
-  async selectedProperty(){
-    const modal = await this._modalControl.create({
-      component: ModalGenericoComponent,
-      cssClass: 'my-modal-generic-class',
-    });
+  async selectedProperty() {
     this.showSpinner = true;
     this.promesa.push(this.comercio.updateInventario(this.selectedProd).subscribe(async data => {
-      this.message.title = 'Se actualizo correctamente';
+      const result = data.status === 'OK' ? 'A-200' : 'A-500';
       this.showSpinner = false;
-      this.promesa.push(from(modal.onDidDismiss()).subscribe(() => {}));
-      await modal.present();
+      this._managerModal.configMessage(result);
+      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class');
     }));
   }
 
