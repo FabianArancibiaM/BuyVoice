@@ -22,6 +22,6 @@
     <ion-button class="buttonRecord" (click)="nuevaVenta()">
       <ion-icon class="mic" name="mic"></ion-icon>
     </ion-button>
-    <ion-button  class="finish" (click)="registrar()" [disabled]="dataTable.length===0"> finalizar </ion-button>
+    <ion-button  class="finish" (click)="registrar()" *ngIf="dataTable.length>0"> Finalizar </ion-button>
   </div>
 </ion-content>

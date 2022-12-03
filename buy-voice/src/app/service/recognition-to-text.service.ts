@@ -29,7 +29,7 @@ export class RecognitionToText {
     this._prodList = DEFINITION_PRODUCTS.porMayor.productos.concat(DEFINITION_PRODUCTS.porMenor.productos);
     this._unidList = DEFINITION_PRODUCTS.porMayor.unidad.concat(DEFINITION_PRODUCTS.porMenor.unidad);
   }
-  recognition(frase: string[], flow) {
+  recognition(frase: string[], flow: 'COMPRA'| 'VENTA') {
     try {
       console.log('frase', JSON.stringify(frase));
 
@@ -39,8 +39,6 @@ export class RecognitionToText {
     // cantidad + uni. medida + nombre prod
     // cantidad + nombre prod
     // nombre prod
-    // const frase = 'dos kilos manzana dos unidades piñas y tres tiras de vit. C aparte un kilo mas de manzana y una piña mas';
-    // const frase = ['1 kg de manzana y dos de piña y otra piña'];
     let txt = '';
     frase.forEach(world => (txt = txt + ' ' + world));
     const arrFrase = txt
@@ -96,7 +94,7 @@ export class RecognitionToText {
 
   defineValue(item: IProduct) {
     item.precio = item.precio.replace('$','');
-    if( parseInt(item.precio) > 0){
+    if( parseInt(item.precio, 10) > 0){
       return;
     }
     const inventario = this._listInventory.find(inv => inv.nombre.toUpperCase() === item.nombre.toUpperCase());

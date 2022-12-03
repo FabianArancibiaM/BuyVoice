@@ -49,13 +49,13 @@ export class InventarioModel {
         this._precioVentaActual = v;
     }
     public get nombre() {
-        return this._nombre;
+        return this._nombre && this._nombre.charAt(0).toUpperCase() + this._nombre.slice(1);
     }
     public set nombre(v: string) {
         this._nombre = v;
     }
     public get unidadMedida() {
-        return this._unidadMedida;
+        return this._unidadMedida && this._unidadMedida.charAt(0).toUpperCase() + this._unidadMedida.slice(1);
     }
     public set unidadMedida(v: string) {
         this._unidadMedida = v;

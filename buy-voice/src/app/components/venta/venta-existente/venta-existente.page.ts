@@ -70,6 +70,9 @@ export class VentaExistentePage implements OnInit, OnDestroy {
       this._nuevaVnt = [];
       this._nuevaVnt = datos.message;
       this.showSpinner = false;
+      if(this.listaFecha.length ===0){
+        this.listaFecha.push('Sin datos');
+      }
     }));
   }
 

@@ -88,6 +88,9 @@ export class CompraExistentePage implements OnInit, OnDestroy {
         });
         this._nuevaVnt = [];
         this._nuevaVnt = datos.message;
+        if(this.listaFecha.length ===0){
+          this.listaFecha.push('Sin datos');
+        }
       } else {
         this.errorPrincipal();
       }
@@ -143,8 +146,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
 
   buscarCompra(fecha){
     this._dateSelec = fecha.detail.value;
+    this.showDetails = false;
     this.montoTotal = 0;
     this.dataCardGeneral = [];
+    this.showcardGeneral= true;
     this._nuevaVnt.forEach( (comp, index) => {
       if(comp.fecha === fecha.detail.value){
         const object: ICompraVenta = {
@@ -160,6 +165,7 @@ export class CompraExistentePage implements OnInit, OnDestroy {
       }
     });
   }
+
   viewDetails(event: number){
     this.showDetails = true;
     this.showcardGeneral = false;

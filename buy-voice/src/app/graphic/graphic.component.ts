@@ -68,12 +68,14 @@ export class GraphicChartComponent implements OnInit {
     }
   }
 
-  barChar(){
-    this._comercio.getCompras().subscribe(data => {
-      const result = this._charService.mappingBarChar(data.message);
-      this.title = result.title;
-      this.builChart('bar', result.data);
-    });
+  pieChart(){
+    this._charService.getPurchasesVsEarnings().subscribe(
+      data => {
+        const result = this._charService.mappingPieChar(data.message);
+        this.title = result.title;
+        this.builChart('pie', result.data);
+      }
+    );
   }
 
   lineChart(){
@@ -84,14 +86,12 @@ export class GraphicChartComponent implements OnInit {
     });
   }
 
-  pieChart(){
-    this._charService.getPurchasesVsEarnings().subscribe(
-      data => {
-        const result = this._charService.mappingPieChar(data.message);
-        this.title = result.title;
-        this.builChart('pie', result.data);
-      }
-    );
+  barChar(){
+    this._comercio.getCompras().subscribe(data => {
+      const result = this._charService.mappingBarChar(data.message);
+      this.title = result.title;
+      this.builChart('bar', result.data);
+    });
   }
 
   builChart(type, data){

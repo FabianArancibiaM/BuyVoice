@@ -62,7 +62,7 @@ export class AjustarInventarioPage implements OnInit, OnDestroy {
   }
 
   buscarProducto(evento) {
-    this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value);
+    this.selectedProd = this.listaInventario.find(x => x.id.toString() === evento.detail.value.toString());
     this.medidaDefault = this.selectedProd.unidadMedidaVenta;
   }
 

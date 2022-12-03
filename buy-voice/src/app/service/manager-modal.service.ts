@@ -54,6 +54,16 @@ export class ManagerModal {
             title: 'Fallo!',
             description: 'Se produjo un error al intentar escuchar',
             code: '500'
+        },
+        'CUSTOM-001':{
+            title: 'Atención!',
+            description: '',
+            code: '200'
+        },
+        'CUSTOM-002':{
+            title: 'Atención!',
+            description: '',
+            code: '500'
         }
     };
 

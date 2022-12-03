@@ -45,7 +45,7 @@ export class ChartManagerService {
             }
         });
         return {
-            title: 'Compra V/s Ganancias',
+            title: 'Compra V/s Ventas',
             data: {
                 labels: [
                     this.dictionary.red.name,
@@ -73,20 +73,31 @@ export class ChartManagerService {
             10: 'Octubre', 11: 'Noviembre', 12: 'Diciembre'
         };
         const listaMes: Array<{ mes: number; total: number }> = [];
-        // data.filter(result => {
-        //     const mes = result.fecha.split('/')[1];
-        //     if(!listaMes.find(l => l.mes.toString() === mes)){
-        //         listaMes.push(mes);
-        //     }
-        //     if (mes !== mesActual.toString()) { return; }
-        // });
+        data.filter(result => {
+            const dateVenta = result.fecha.split('/');
+            if(parseInt(dateVenta[2], 10)===fechaActual.getFullYear()){
+                const mes = dateVenta[1];
+                const select = listaMes.find(l => l.mes.toString() === mes);
+                if(!select){
+                    listaMes.push({mes:parseInt(mes, 10),total:result.totalVentaCompra});
+                }else{
+                    select.total = select.total + result.totalVentaCompra;
+                }
+            }
+        });
+        const meses = [];
+        const valores = [];
+        listaMes.forEach( x => {
+            meses.push(mesObject[x.mes]);
+            valores.push(x.total);
+        });
         return {
             title: 'Ventas del Año (mil.)',
             data: {
-                labels: [65, 59, 80, 81, 56, 55, 40],
+                labels: meses,
                 datasets: [{
                     label: fechaActual.getFullYear(),
-                    data: [65, 59, 80, 81, 56, 55, 40],
+                    data: valores,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
@@ -96,23 +107,47 @@ export class ChartManagerService {
     }
 
     mappingBarChar(data: Array<CompraVentaModel>) {
+        console.log(data)
+        const fechaActual = new Date();
+        const listResult: Array<{ id: number; name: string; total: number }> = [];
+        data.filter(result => {
+            const dateVenta = result.fecha.split('/');
+            if (parseInt(dateVenta[1], 10) === (fechaActual.getMonth() + 1)) {
+                result.detalleProductos.forEach(prod => {
+                    const select = listResult.find(l => l.id.toString() === prod.inventario.id.toString());
+                    if (!select) {
+                        listResult.push(
+                            {
+                                id: prod.inventario.id,
+                                name: `${prod.inventario.nombre} ${prod.inventario.unidadMedida}`,
+                                total: prod.cantidad
+                            }
+                        );
+                    } else {
+                        select.total = select.total + prod.cantidad;
+                    }
+
+                });
+            }
+
+        });
+        console.log(listResult)
+        const listName = [];
+        const listCount = [];
+        listResult.forEach(ls => {
+            listName.push(ls.name);
+            listCount.push(ls.total);
+        });
+
         return {
             title: 'Compra V/s Ganancias',
             data: {
-                labels: ['2022-05-10', '2022-05-11', '2022-05-12', '2022-05-13',
-                    '2022-05-14', '2022-05-15', '2022-05-16', '2022-05-17',],
+                labels: listName,
                 datasets: [
                     {
-                        label: 'Sales',
-                        data: ['467', '576', '572', '79', '92',
-                            '574', '573', '576'],
+                        label: 'Productos',
+                        data: listCount,
                         backgroundColor: 'blue'
-                    },
-                    {
-                        label: 'Profit',
-                        data: ['542', '542', '536', '327', '17',
-                            '0.00', '538', '541'],
-                        backgroundColor: 'limegreen'
                     }
                 ]
             }

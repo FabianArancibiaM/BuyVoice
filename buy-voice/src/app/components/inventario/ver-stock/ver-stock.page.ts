@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { Subscription } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ComercioService } from 'src/app/service/comercio.service';
@@ -45,7 +46,7 @@ export class VerStockPage implements OnInit, OnDestroy {
 
   buscarProducto(evento){
     this.promesa.push(this.comercio.getCompras().subscribe( data => {
-      this.selectedProd = this.listaInventario.find(x => x.id === evento.detail.value);
+      this.selectedProd = this.listaInventario.find(x => x.id.toString() === evento.detail.value.toString());
       this.boletaCompra = [];
       data.message.forEach(p => {
         const pro = p.detalleProductos.find(x => x.inventario.id.toString() === this.selectedProd.id.toString());
