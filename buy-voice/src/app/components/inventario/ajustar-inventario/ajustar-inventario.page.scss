@@ -44,11 +44,13 @@ ion-button{
     width: 100%;
 }
 ion-card-content{
-    overflow: auto;
-    height: 450px;
+    overflow: visible;
+    height: 100%;
+    
 }
-::-webkit-scrollbar {
-    display: none;
+
+ion-content{
+    --background: #296e67;
 }
 
 .divSpinner {
@@ -67,4 +69,11 @@ ion-card-content{
 }
 ion-spinner {
     transform: scale(6);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+.botonera {
+ background-color: white;
 }

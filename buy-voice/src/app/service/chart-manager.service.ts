@@ -108,6 +108,9 @@ export class ChartManagerService {
 
     mappingBarChar(data: Array<CompraVentaModel>) {
         console.log(data)
+        const asigName = (name:string, unid:string) => {
+            return `${name} (${unid.toLowerCase().includes('k') ? 'kg': 'unid.'})`
+        }
         const fechaActual = new Date();
         const listResult: Array<{ id: number; name: string; total: number }> = [];
         data.filter(result => {
@@ -119,7 +122,7 @@ export class ChartManagerService {
                         listResult.push(
                             {
                                 id: prod.inventario.id,
-                                name: `${prod.inventario.nombre} ${prod.inventario.unidadMedida}`,
+                                name: asigName(prod.inventario.nombre, prod.inventario.unidadMedida),
                                 total: prod.cantidad
                             }
                         );

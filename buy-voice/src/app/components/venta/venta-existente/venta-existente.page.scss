@@ -93,3 +93,16 @@
 ion-spinner {
     transform: scale(6);
 }
+
+ion-content {
+    --background: #296e67;;
+}
+
+// ion-item {
+//     --background: #52a6ba;
+//     --color: white;
+// }
+
+::-webkit-scrollbar {
+    display: none;
+}

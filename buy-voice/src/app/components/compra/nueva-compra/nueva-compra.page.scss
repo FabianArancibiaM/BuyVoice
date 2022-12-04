@@ -1,57 +1,80 @@
-.divTable{
+.divTable {
     text-align: center;
-    height: 70%;
+    height: 65%;
     margin: 10px;
     overflow: auto;
     box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f;
+    background-color: #fef6cd;
 }
+
 .divTextArea {
     margin: 10px;
     height: 15%;
     text-align: end;
+    box-shadow: 0 5px 5px -3px #0003, 0 8px 10px 1px #00000024, 0 3px 14px 2px #0000001f;
+    background-color: #fef6cd;
 }
+
 .textArea {
     // width: 100%;
     padding-right: 10px;
     padding-left: 10px;
 }
-.montoTotal{
+
+.montoTotal {
     margin-top: 0;
     font-size: 24px;
     padding-top: 10px;
     padding-right: 10px;
 }
-.divRecord{
+
+.divRecord {
     text-align: center;
     height: 10%;
+    z-index: 99;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    bottom: 20px;
 }
+
 .buttonRecord {
-    --border-radius: 80%!important;
+    --border-radius: 80% !important;
     --background: #20B2A3;
     --background-hover: #296e67;
     --background-activated: #296e67;
     --background-focused: #296e67;
     --color: white;
+    width: 30%;
+    height: 120%;
+    font-size: 28px;
 }
-.record {
-    
-}
+
+.record {}
+
 .mic {
     border-radius: 50px;
 }
+
 .spinerGeneral {
     position: inherit;
     z-index: 99999;
-  }
-  .finish{
+}
+
+.finish {
     --background: #E6007E;
     --background-hover: #f8038afd;
     --background-activated: #E963AC;
     --background-focused: #E963AC;
     --color: white;
-  }
+    width: 30%;
+    height: 120%;
+    font-size: 20px;
+}
 
-  .divSpinner {
+.divSpinner {
     justify-content: center;
     align-items: center;
     display: flex;
@@ -62,9 +85,11 @@
     height: 100%;
     width: 100%;
 }
-.spinerGeneral{
+
+.spinerGeneral {
     --color: #E6007E;
 }
+
 ion-spinner {
     transform: scale(6);
 }
