@@ -1,3 +1,4 @@
+import { NavController } from '@ionic/angular';
 import { NegocioModel } from 'src/app/models/negocio.model';
 import { take } from 'rxjs/operators';
 import { OnDestroy, ChangeDetectorRef } from '@angular/core';
@@ -41,25 +42,44 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
     private _infoNegocio: NegocioModel, private _recognitionToText: RecognitionToText, private _speech: Speech,
     private _cd: ChangeDetectorRef,
     private _managerModal: ManagerModal,
-    public infoSubMenu: InfoSubMenu) { }
+    public infoSubMenu: InfoSubMenu,
+    private _navCtrl: NavController) { }
 
   ngOnDestroy(): void {
   }
 
+  errorPrincipal(){
+    this._managerModal.configMessage('ERR-GENERIC');
+    this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {
+      this._navCtrl.navigateForward(['menu-secundario']);
+    });
+  }
+
   ngOnInit() {
     this._promesa = [];
-    this._promesa.push(this._comercio.getInventario().subscribe(data => this._listaInventario = data.message, err => console.log(err) ));
+    this._promesa.push(this._comercio.getInventario().subscribe(data => {
+      if(data.status == 'NOK'){
+        this.errorPrincipal()
+        return
+      }
+      this._listaInventario = data.message
+    }, err => console.log(err) ));
     this._listaProdCmpra = [];
     this.dataTable = [];
   }
 
   nuevaVenta() {
     let isOpen = false;
-    const errorListening = (txt, code) => {
+    const errorListening = (txt: string, code) => {
+      if(isOpen){
+        return
+      }
       isOpen = true;
       this._managerModal.configMessage(code);
-      this._managerModal.configMessageDEBUG(txt);
-      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class');
+      if(txt.length>0)this._managerModal.configMessageDEBUG(txt);
+      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {
+        isOpen = false;
+      });
     };
     const validateCount = (nameProd, account) => {
       const result =
@@ -72,16 +92,38 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
       }
       return {valid: false, msg: 'No tienes la cantidad necesaria para vender...', code: 'CUSTOM-002' };
     };
-    const frase = [
-      //   '1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
-      // '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
-      // "5 kg de palta chilena a $12000"
-      // "5 unidades de piña a $7000"
-      "1 piña"
-    ];
-    const listObject = this._recognitionToText.recognition(frase,'VENTA');
-    const antes = this.dataTable.length;
-    listObject.forEach(obj => {
+
+
+    // const frase = [
+    //   //   '1 kg de manzana verde a $12000 y dos de piña a $5000 y otra piña a $5000 y 3 kilos de palta hass chilena $7000',
+    //   // '1 kg de manzana verde y dos de piña y otra piña y 3 kilos de palta hass chilena'
+    //   // "5 kg de palta chilena a $12000"
+    //   // "5 unidades de piña a $7000"
+    //   "80 kg palta"
+    // ];
+    // const listObject = this._recognitionToText.recognition(frase,'VENTA');
+    // const antes = this.dataTable.length;
+    // listObject.forEach(obj => {
+    //   if([1,2,3].includes(obj.rule)){
+    //     const isValid = validateCount(obj.nombre, obj.cantidad);
+    //     if(isValid.valid){
+    //       if(isValid.msg)  {errorListening(isValid.msg, isValid.code);}
+    //       this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio, 10)]);
+    //       this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio, 10));
+    //     } else {
+    //       errorListening(isValid.msg, isValid.code);
+    //     }
+    //   }
+    // });
+    // if(this.dataTable.length === antes && !isOpen){
+    //   errorListening(`${frase} - ${JSON.stringify(listObject)}`, 'MICRO-500');
+    // }
+
+    this._speech.initServiceSpeech().subscribe(matches => {
+      this.textRecognition = matches;
+      const listObject = this._recognitionToText.recognition(matches,'VENTA');
+      const antes = this.dataTable.length;
+      listObject.forEach(obj => {
       if([1,2,3].includes(obj.rule)){
         const isValid = validateCount(obj.nombre, obj.cantidad);
         if(isValid.valid){
@@ -91,27 +133,19 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
         } else {
           errorListening(isValid.msg, isValid.code);
         }
+      }else {
+        errorListening(`No se pudo reconocer la solicitud`, 'MICRO-500');
       }
     });
-    if(this.dataTable.length === antes && !isOpen){
-      errorListening(`${frase} - ${JSON.stringify(listObject)}`, 'MICRO-500');
+    if(listObject.length == 0 ||  this.dataTable.length === antes){
+      // this.errorListening(`${matches} - ${JSON.stringify(listObject)}`);
+      errorListening(`No se pudo reconocer la solicitud`, 'MICRO-500');
     }
-    // this._speech.initServiceSpeech().subscribe(matches => {
-    //   this.textRecognition = matches;
-    //   const listObject = this._recognitionToText.recognition(matches,'VENTA');
-    //   const antes = this.dataTable.length;
-    //   listObject.forEach(obj => {
-    //     if([1,2,3].includes(obj.rule)){
-    //       this.dataTable.push([obj.nombre, obj.unidad, obj.cantidad, parseInt(obj.precio, 10)]);
-    //       this.montoTotal = this.montoTotal + (obj.cantidad * parseInt(obj.precio, 10));
-    //     }
-    //   });
-    //   this._cd.detectChanges();
-    //   if(this.dataTable.length === antes){
-    //     errorListening(`${matches} - ${JSON.stringify(listObject)}`, 'MICRO-500');
-    //   }
-    //   this._cd.detectChanges();
-    // });
+      this._cd.detectChanges();
+    }, err => {
+      console.log(err)
+      errorListening('','ERR-GENERIC');
+    });
   }
 
   registrar() {
@@ -149,6 +183,8 @@ export class NuevaVentaPage implements OnInit, OnDestroy {
       this._promesa.push(sus);
     } catch (error) {
       this.textError = error;
+      this._managerModal.configMessage('G-500');
+      this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class');
     }
   }
 

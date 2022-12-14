@@ -95,7 +95,10 @@ export class CompraExistentePage implements OnInit, OnDestroy {
         this.errorPrincipal();
       }
       this.showSpinner = false;
-    }, err => console.log(err)));
+    }, err => {
+      console.log(err)
+      this.errorPrincipal();
+    }));
   }
 
   eventClick(evento){

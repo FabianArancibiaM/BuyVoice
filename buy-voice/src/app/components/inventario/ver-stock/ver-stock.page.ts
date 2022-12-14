@@ -6,6 +6,8 @@ import { InventarioModel } from 'src/app/models/inventario.model';
 import { ICompra } from 'src/app/interfaces/ICompra.interface.interface';
 import { ISelectorProducto } from 'src/app/interfaces/ISelectorProducto.interface';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
+import { ManagerModal } from 'src/app/service/manager-modal.service';
+import { ModalGenericoComponent } from 'src/app/ui/modal-generico/modal-generico.component';
 
 @Component({
   selector: 'app-ver-stock',
@@ -29,7 +31,8 @@ export class VerStockPage implements OnInit, OnDestroy {
 
   constructor(
     private comercio: ComercioService,
-    public infoSubMenu: InfoSubMenu
+    public infoSubMenu: InfoSubMenu,
+    private _managerModal: ManagerModal
   ) { }
 
   ngOnDestroy(): void {
@@ -42,6 +45,11 @@ export class VerStockPage implements OnInit, OnDestroy {
     this.promesa.push(this.comercio.getInventario().subscribe( data => {
       this.listaInventario = data.message;
     } ));
+  }
+
+  errorPrincipal(){
+    this._managerModal.configMessage('ERR-GENERIC');
+    this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {});
   }
 
   buscarProducto(evento){
@@ -58,7 +66,10 @@ export class VerStockPage implements OnInit, OnDestroy {
           });
         }
       });
-    }, err => console.log(err) ));
+    }, err => {
+      console.log(err)
+      this.errorPrincipal()
+    } ));
   }
 
 }

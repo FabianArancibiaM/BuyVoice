@@ -12,6 +12,7 @@ import { ComercioService } from '../service/comercio.service';
 export class GraphicChartComponent implements OnInit {
 
   @Input() typeChar = '';
+  @Input() typeUnit = '';
 
   public idGenerate = '';
   public title = '';
@@ -63,7 +64,11 @@ export class GraphicChartComponent implements OnInit {
       return;
     }
     if (key === 'bar'){
-      this.barChar();
+      if(this.typeUnit=='kg'){
+        this.barChar();
+      } else {
+        this.barChar2();
+      }
       return;
     }
   }
@@ -88,9 +93,37 @@ export class GraphicChartComponent implements OnInit {
 
   barChar(){
     this._comercio.getCompras().subscribe(data => {
-      const result = this._charService.mappingBarChar(data.message);
+      const result = this._charService.mappingBarChar(data.message, this.typeUnit);
       this.title = result.title;
       this.builChart('bar', result.data);
+    });
+  }
+
+  barChar2(){
+    this._comercio.getCompras().subscribe(data => {
+      const result = this._charService.mappingBarChar(data.message, this.typeUnit);
+      this.title = result.title;
+      this.builChart2('line', result.data);
+    });
+  }
+
+  builChart2(type, data) {
+    new Chart(this.idGenerate, {
+      type,
+      data,
+      options: {
+        responsive: true,
+        interaction: {
+          intersect: false,
+          axis: 'x'
+        },
+        plugins: {
+          title: {
+            display: true,
+            text: (ctx) => 'Step ' + ctx.chart.data.datasets[0].stepped + ' Interpolation',
+          }
+        }
+      }
     });
   }
 

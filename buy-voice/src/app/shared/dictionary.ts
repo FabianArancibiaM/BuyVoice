@@ -15,7 +15,7 @@ export const PATTERN_LIST = [
     },
 ];
 
-export const CANT_LIST = ['una', 'un', 'dos', 'tre', 'tres', '1', '2', 'otra'];
+export const CANT_LIST = ['una', 'un', 'dos', 'tre', 'tres', '1', '2', 'otra', 'medio'];
 
 export const DEFINITION_PRODUCTS = {
     porMayor: {

@@ -18,12 +18,12 @@ export class ManagerModal {
         'NOT-DATA':{
             title: '',
             description: 'No se encontraron datos',
-            code: '200'
+            code: '500'
         },
         'ERR-GENERIC':{
             title: 'Fallo!',
             description: 'Se produjo un error',
-            code: '200'
+            code: '500'
         },
         'A-200':{
             title: 'Completado!',
@@ -32,7 +32,7 @@ export class ManagerModal {
         },
         'A-500':{
             title: 'Fallo!',
-            description: 'Se guardo correctamente',
+            description: 'Se produjo un error al intentar actualizar',
             code: '500'
         },
         'G-200':{
@@ -42,7 +42,7 @@ export class ManagerModal {
         },
         'G-500':{
             title: 'Fallo!',
-            description: 'Se produjo un error al intentar actualizar',
+            description: 'Se produjo un error al intentar guardar',
             code: '500'
         },
         'T-MICRO':{

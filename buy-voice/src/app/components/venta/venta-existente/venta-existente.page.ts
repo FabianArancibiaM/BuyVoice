@@ -6,9 +6,11 @@ import { from, Observable, Subject, Subscription } from 'rxjs';
 import { CompraVentaModel } from 'src/app/models/compra-venta.model';
 import { ICompraVenta } from 'src/app/interfaces/ICardCompraVenta.interface';
 import { ModalEditProductsComponent } from 'src/app/ui/modal-edit-products/modal-edit-products.component';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 import { DataManagementService } from 'src/app/service/data-management.service';
 import { InfoSubMenu } from 'src/app/models/info-sub-menu.model';
+import { ManagerModal } from 'src/app/service/manager-modal.service';
+import { ModalGenericoComponent } from 'src/app/ui/modal-generico/modal-generico.component';
 
 @Component({
   selector: 'app-venta-existente',
@@ -48,7 +50,9 @@ export class VentaExistentePage implements OnInit, OnDestroy {
     private _comercio: ComercioService,
     private _modalControl: ModalController,
     private _management: DataManagementService,
-    public infoSubMenu: InfoSubMenu
+    private _managerModal: ManagerModal,
+    public infoSubMenu: InfoSubMenu,
+    private _navCtrl: NavController
   ) { }
 
   ngOnDestroy(): void {
@@ -58,12 +62,33 @@ export class VentaExistentePage implements OnInit, OnDestroy {
     this._management.flow = 'INICIO';
   }
 
+  errorPrincipal(){
+    this._managerModal.configMessage('ERR-GENERIC');
+    this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {
+      this._navCtrl.navigateForward(['menu-secundario']);
+    });
+  }
+
   async ngOnInit() {
     this._management.flow = 'VENTA';
     this.showSpinner = true;
     this._promesa = [];
-    this._promesa.push(this._comercio.getInventario().subscribe());
+    let open= false;
+    this._promesa.push(this._comercio.getInventario().subscribe(data => {
+      
+      if(data.status == 'NOK' && !open){
+        open = true
+        this.errorPrincipal()
+        
+      }
+    }, err => {}));
     this._promesa.push(this._comercio.getVentas().pipe(take(1)).subscribe( (datos) => {
+      
+      if(datos.status == 'NOK' && !open){
+        open = true
+        this.errorPrincipal()
+        return
+      }
       datos.message.forEach(dts => {
         if(!this.listaFecha.includes(dts.fecha)) {this.listaFecha.push(dts.fecha);}
       });
@@ -73,7 +98,7 @@ export class VentaExistentePage implements OnInit, OnDestroy {
       if(this.listaFecha.length ===0){
         this.listaFecha.push('Sin datos');
       }
-    }));
+    }, err => {}));
   }
 
   eventClick(evento){

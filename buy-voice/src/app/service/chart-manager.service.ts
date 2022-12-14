@@ -87,6 +87,7 @@ export class ChartManagerService {
         });
         const meses = [];
         const valores = [];
+        listaMes.sort(function(a, b){return a.mes - b.mes})
         listaMes.forEach( x => {
             meses.push(mesObject[x.mes]);
             valores.push(x.total);
@@ -106,13 +107,13 @@ export class ChartManagerService {
         };
     }
 
-    mappingBarChar(data: Array<CompraVentaModel>) {
+    mappingBarChar(data: Array<CompraVentaModel>, filter: string) {
         console.log(data)
         const asigName = (name:string, unid:string) => {
             return `${name} (${unid.toLowerCase().includes('k') ? 'kg': 'unid.'})`
         }
         const fechaActual = new Date();
-        const listResult: Array<{ id: number; name: string; total: number }> = [];
+        const listResult: Array<{ id: number; name: string; total: number, type:string }> = [];
         data.filter(result => {
             const dateVenta = result.fecha.split('/');
             if (parseInt(dateVenta[1], 10) === (fechaActual.getMonth() + 1)) {
@@ -123,7 +124,8 @@ export class ChartManagerService {
                             {
                                 id: prod.inventario.id,
                                 name: asigName(prod.inventario.nombre, prod.inventario.unidadMedida),
-                                total: prod.cantidad
+                                total: prod.cantidad,
+                                type: prod.inventario.unidadMedida
                             }
                         );
                     } else {
@@ -138,12 +140,14 @@ export class ChartManagerService {
         const listName = [];
         const listCount = [];
         listResult.forEach(ls => {
-            listName.push(ls.name);
-            listCount.push(ls.total);
+            if(ls.type.toUpperCase() == filter.toUpperCase()){
+                listName.push(ls.name);
+                listCount.push(ls.total);
+            }
         });
 
         return {
-            title: 'Compra V/s Ganancias',
+            title: filter=='kg'?'Productos en kg.': 'Productos en Unidades',
             data: {
                 labels: listName,
                 datasets: [

@@ -64,9 +64,8 @@ export class RecognitionToText {
         this._posi = this._posi + 1;
       }
     }
-
     prod.forEach( item => {
-      this.defineValue(item);
+      this.defineValue(item, flow);
       this.unitMeasurement(item);
     });
 
@@ -92,10 +91,14 @@ export class RecognitionToText {
 
   }
 
-  defineValue(item: IProduct) {
+  defineValue(item: IProduct, flow) {
     item.precio = item.precio.replace('$','');
     if( parseInt(item.precio, 10) > 0){
       return;
+    }
+    if(flow === 'COMPRA'){
+      item.precio = '0'
+      return
     }
     const inventario = this._listInventory.find(inv => inv.nombre.toUpperCase() === item.nombre.toUpperCase());
     if (inventario) {
@@ -104,7 +107,7 @@ export class RecognitionToText {
   }
 
   esCantidad = palabra => !isNaN(palabra) || CANT_LIST.includes(palabra);
-  unidadMed = palabra => this._unidList.find(unidad => unidad.includes(palabra) || palabra.includes(unidad)) !== undefined;
+  unidadMed = palabra => this._unidList.find(unidad => unidad.includes(palabra) || (palabra && palabra.includes(unidad))) !== undefined;
   nombre = palabra => this._prodList.find(unidad => unidad.includes(palabra) || ( palabra && palabra.includes(unidad)) ) !== undefined;
   precio = palabra => palabra !== undefined && palabra.includes('$');
 
@@ -130,7 +133,10 @@ export class RecognitionToText {
   }
 
   validName(palabra: string, posiArray, array){
-    const filter = this._prodList.filter(unidad => unidad.toUpperCase().includes(palabra.toUpperCase()));
+    const filter = this._prodList.filter(unidad => {
+debugger
+      return unidad.toUpperCase().includes(palabra.toUpperCase()) || palabra.toUpperCase().includes(unidad.toUpperCase())
+    });
     if(array[posiArray+1] === undefined){
       return palabra;
     }
