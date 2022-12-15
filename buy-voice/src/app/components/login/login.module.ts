@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -17,6 +17,7 @@ import { TablaGenericaModule } from 'src/app/ui/tabla-generica/card-main.module'
     LoginPageRoutingModule,
     TablaGenericaModule
   ],
-  declarations: [LoginPage]
+  declarations: [LoginPage],
+  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AnularCompraPageModule {}

@@ -12,11 +12,13 @@ import { initializeApp,provideFirebaseApp } from '@angular/fire/app';
 import { environment } from '../environments/environment';
 import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { SpeechRecognition } from '@awesome-cordova-plugins/speech-recognition/ngx';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, ReportePipe],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     IonicModule.forRoot({ backButtonText: '' }),
     AppRoutingModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),

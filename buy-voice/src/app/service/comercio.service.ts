@@ -24,6 +24,10 @@ export class ComercioService {
     private _infoNegocio: NegocioModel
   ) { }
 
+  getListInv(){
+    return this._listaInventario;
+  }
+
   toDateFormat(fecha: string) {
     const f = fecha.split('-');
     return new Date(`${f[1]}/${f[0]}/${f[2]}`);
@@ -39,6 +43,10 @@ export class ComercioService {
               && us.clave === clave
             )
           );
+          if(!negocio){
+            observer.next({ status: 'NOK', message: '' });
+            return;
+          }
           this._infoNegocio.id = negocio.id;
           this._infoNegocio.nombre = negocio.nombre;
           const nuevaLista = new Array<UsuarioModel>();

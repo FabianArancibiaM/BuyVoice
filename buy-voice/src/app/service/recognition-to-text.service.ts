@@ -23,15 +23,12 @@ export class RecognitionToText {
   private _posi = 0;
 
   constructor(private _comercio: ComercioService) {
-    this._comercio.getInventario().subscribe( data =>{
-      this._listInventory = data.message;
-    });
     this._prodList = DEFINITION_PRODUCTS.porMayor.productos.concat(DEFINITION_PRODUCTS.porMenor.productos);
     this._unidList = DEFINITION_PRODUCTS.porMayor.unidad.concat(DEFINITION_PRODUCTS.porMenor.unidad);
   }
   recognition(frase: string[], flow: 'COMPRA'| 'VENTA') {
     try {
-      console.log('frase', JSON.stringify(frase));
+      this._listInventory = this._comercio.getListInv();
 
     const conetoresList = CONECTOR_LIST;
     const patrones = PATTERN_LIST;
@@ -134,7 +131,6 @@ export class RecognitionToText {
 
   validName(palabra: string, posiArray, array){
     const filter = this._prodList.filter(unidad => {
-debugger
       return unidad.toUpperCase().includes(palabra.toUpperCase()) || palabra.toUpperCase().includes(unidad.toUpperCase())
     });
     if(array[posiArray+1] === undefined){
