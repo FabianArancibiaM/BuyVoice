@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
 
   errorPrincipal(){
     this._managerModal.configMessage('ERR-GENERIC');
-    this._managerModal.configMessageDEBUG('Usuaio o contraseña incorrecta');
+    this._managerModal.configMessageDEBUG('Usuario o contraseña incorrecta');
     this._managerModal.initConfigModal(ModalGenericoComponent, 'my-modal-generic-class', () => {
       this._router.navigate(['/']);
     });

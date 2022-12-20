@@ -21,26 +21,26 @@ export class MenuPrincipalPage implements OnInit {
   public listCard: IInfoCardMenu[] = [
     {
       title: 'Mis Compras', children: [
-        { title: 'Nueva compra', url: '/nueva-compra' },
-        { title: 'Ver historial', url: '/compra-existente' },
-      ]
+        { title: 'Nueva compra', url: '/nueva-compra', icon:'../../../../assets/add-to-cart.png' },
+        { title: 'Ver historial', url: '/compra-existente', icon:'../../../../assets/historial-de-compras.png' },
+      ], icon: '../../../../assets/carro_compras.png'
     },
     {
       title: 'Mis Ventas', children: [
-        { title: 'Nueva venta', url: '/nueva-venta' },
-        { title: 'Ver historial', url: '/venta-existente' },
-      ]
+        { title: 'Nueva venta', url: '/nueva-venta', icon:'../../../../assets/seller.png' },
+        { title: 'Ver historial', url: '/venta-existente', icon:'../../../../assets/ventas_realizadas.png' },
+      ], icon: '../../../../assets/bolsa_ventas.png'
     },
     {
       title: 'Mi Inventario', children: [
-        { title: 'Ver Stock', url: '/ver-stock' },
-        { title: 'Ajustar Inventario', url: '/ajustar-inventario' },
-      ]
+        { title: 'Ver Stock', url: '/ver-stock', icon:'../../../../assets/stock.png' },
+        { title: 'Ajustar Inventario', url: '/ajustar-inventario', icon:'../../../../assets/ajustar.png' },
+      ], icon: '../../../../assets/inventory.png'
     },
     {
       title: 'Mis Reportes', children: [
-        { title: '', url: '/reporte' }
-      ]
+        { title: '', url: '/reporte', icon:'' }
+      ], icon: '../../../../assets/analysis.png'
     }
   ];
 
@@ -62,10 +62,12 @@ export class MenuPrincipalPage implements OnInit {
       const obj = new InfoSubMenu();
       obj.title = data.title;
       obj.url = data.url;
+      obj.icon = data.icon;
       listSubCard.push(obj);
     });
     this.infoMenu.children = listSubCard;
     this._infoSubMenu.title = card.title;
+    this._infoSubMenu.icon = card.icon;
     this.navCtrl.navigateForward([listSubCard.length > 1 ? 'menu-secundario' : listSubCard[0].url]);
   }
 

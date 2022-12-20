@@ -23,6 +23,7 @@ export class MenuSecundarioPage implements OnInit {
 
   redirectTo(card: InfoSubMenu ){
     this._infoSubMenu.title = card.title;
+    this._infoSubMenu.icon = card.icon;
     this.navCtrl.navigateForward([card.url]);
   }
 

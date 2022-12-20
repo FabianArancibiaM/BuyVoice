@@ -7,11 +7,13 @@
 	</ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-	<ion-list lines="none">
+	<ion-list lines="none" style="margin-bottom: 25%;">
 		<ion-item *ngFor="let item of dataChildren" detail="true" (click)="redirectTo(item)">
 			<ion-label class="ion-text-wrap item-text">
 				{{ item.title }}
 			</ion-label>
+			<img [src]="item.icon" style="width: 35px;">
 		</ion-item>
 	</ion-list>
+	<ion-img src="../../../../assets/logo.png"></ion-img>
 </ion-content>

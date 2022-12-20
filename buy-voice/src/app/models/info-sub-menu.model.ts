@@ -9,6 +9,7 @@ import { Injectable } from '@angular/core';
 export class InfoSubMenu {
     private _title: string;
     private _url: string;
+    private _icon: string;
 
     constructor() { }
 
@@ -22,6 +23,14 @@ export class InfoSubMenu {
 
     get title() {
         return this._title;
+    }
+
+    set icon(v: string) {
+        this._icon = v;
+    }
+
+    get icon() {
+        return this._icon;
     }
 
     get url() {

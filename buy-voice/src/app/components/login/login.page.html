@@ -4,7 +4,7 @@
 	</ion-toolbar>
 </ion-header>
 <ion-content style="width: 100% !important;">
-	<form novalidate>
+	<form novalidate style="margin-bottom: 25%;">
 		<ion-item>
 			<ion-label position="floating">Usuario</ion-label>
 			<ion-input type="text" required [(ngModel)]="model.nombre" (ionBlur)="setValue($event.target, 'nombre')" placeholder="{{model.nombre}}"></ion-input>
@@ -19,4 +19,5 @@
 			</ion-col>
 		</ion-row>
 	</form>
+	<img src="../../../../assets/logo.png">
 </ion-content>
